@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="frame">
+    <file>icons/uppeGreenWave.jpg</file>
+    <file>logo.png</file>
+  </qresource>
+</RCC>
