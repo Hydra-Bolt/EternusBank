@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_CreateAccount(object):
+class Ui_CreateAccount:
     def setupUi_create(self, CreateAccount):
         CreateAccount.setObjectName("CreateAccount")
         CreateAccount.resize(1200, 600)

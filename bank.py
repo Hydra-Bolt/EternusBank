@@ -2,9 +2,10 @@
 import DesignClass
 import time
 import sys
+import random
 import importlib
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+importlib.reload(DesignClass)
 
 class Bank(DesignClass.MasterGUI):
     
@@ -17,15 +18,56 @@ class Bank(DesignClass.MasterGUI):
         self.MainWindow.show()
 
     def createAccount(self):
-        filling_data = ["Full Name", "Account Name", "CNIC", "Password", "Account Type"]
-        list_of_data = [self.fullname.text(),self.account_name.text(), self.cnic.text(), self.password_create.text(),self.accountype.currentText()]
+        # List of data fields to be filled
+        filling_data = ["Full Name", "CNIC"]
+
+        # List of data entered by the user
+        list_of_data = [self.fullname.text(), self.cnic.text()]
+
+        # Generate a random account number
+        account_number = "ETR-" + "".join([str(random.randint(0, 9)) for _ in range(6)]) + "-" + "".join(
+            [str(random.randint(0, 9)) for _ in range(6)])
+
+        print(account_number)
+
+        # List of account information fields
+        accounts = ["Account Name", "Account Number", "Account Type", "Password"]
+
+        # List of account data entered by the user
+        accounts_data = [self.account_name.text(), account_number, self.accountype.currentText(), self.password_create.text()]
+
+        # Create a dictionary with the filling data and corresponding user-entered data
+        self.output = {filling_data[i]: list_of_data[i] for i in range(len(list_of_data))}
+
+        # Check if any of the required information fields are empty
         infolist = [i == "" for i in list_of_data]
-        if any(infolist):
-            print(f"{filling_data[infolist.index(True)]} isnt filled")
+        accountlist = [i == "" for i in accounts_data]
+
+        # Display an error message if any required field is empty
+        if any(infolist) or any(accountlist):
+            try:
+                print(f"{filling_data[infolist.index(True)]} isn't filled")
+            except Exception:
+                print(f"{accounts[accountlist.index(True)]} isn't filled")
         else:
+            # Create dictionaries for user information and account information
             info = {filling_data[i]: list_of_data[i] for i in range(len(list_of_data))}
-            self.userAccountInfo.insert_one(info)
+            account = {accounts[i]: accounts_data[i] for i in range(len(accounts_data))}
+            if account["Account Type"] != "Loan Account":
+                account["Balance"] = 0
+                account["Intereset Rate"] = 0.3
+            # Check if the user already exists in the database
+            result = list(self.userAccountInfo.find({"CNIC": info["CNIC"]}))
+            if  result != []:
+                update = {"$push": {"Accounts": account}}
+                self.userAccountInfo.update_one({"CNIC": info["CNIC"]}, update=update)
+            else:
+                print('here')
+                info.update({"Accounts": [account]})
+                self.userAccountInfo.insert_one(info)
+
             self.openHomeWindow()
+
 
     def checkCredentials(self):
         filling_data = ["CNIC", "Account Name", "Password"]

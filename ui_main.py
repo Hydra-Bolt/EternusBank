@@ -15,14 +15,14 @@ from PySide2.QtWidgets import *
 import resource_rc
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(1200, 700)
-        MainWindow.setMinimumSize(QSize(1200, 700))
-        MainWindow.setStyleSheet(u"background-color: rgb(255, 255, 255);")
-        self.centralwidget = QWidget(MainWindow)
+class DashBoard:
+    def setupUi(self, DashBoard):
+        if not DashBoard.objectName():
+            DashBoard.setObjectName(u"DashBoard")
+        DashBoard.resize(1200, 700)
+        DashBoard.setMinimumSize(QSize(1200, 700))
+        DashBoard.setStyleSheet(u"background-color: rgb(255, 255, 255);")
+        self.centralwidget = QWidget(DashBoard)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setSpacing(0)
@@ -200,15 +200,15 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setSpacing(0)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.verticalLayout_5.setContentsMargins(0, 0, 0, -1)
-        self.stackedWidget = QStackedWidget(self.frame_pages)
-        self.stackedWidget.setObjectName(u"stackedWidget")
-        self.page_2 = QWidget()
-        self.page_2.setObjectName(u"page_2")
-        self.verticalLayout_7 = QVBoxLayout(self.page_2)
+        self.responsivePages = QStackedWidget(self.frame_pages)
+        self.responsivePages.setObjectName(u"responsivePages")
+        self.card_page = QWidget()
+        self.card_page.setObjectName(u"card_page")
+        self.verticalLayout_7 = QVBoxLayout(self.card_page)
         self.verticalLayout_7.setSpacing(0)
         self.verticalLayout_7.setObjectName(u"verticalLayout_7")
         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.mainframe_card = QFrame(self.page_2)
+        self.mainframe_card = QFrame(self.card_page)
         self.mainframe_card.setObjectName(u"mainframe_card")
         self.mainframe_card.setFrameShape(QFrame.StyledPanel)
         self.mainframe_card.setFrameShadow(QFrame.Raised)
@@ -430,14 +430,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_7.addWidget(self.mainframe_card)
 
-        self.stackedWidget.addWidget(self.page_2)
-        self.page_1 = QWidget()
-        self.page_1.setObjectName(u"page_1")
-        self.verticalLayout_6 = QVBoxLayout(self.page_1)
+        self.responsivePages.addWidget(self.card_page)
+        self.mainDashBoard = QWidget()
+        self.mainDashBoard.setObjectName(u"page_1")
+        self.verticalLayout_6 = QVBoxLayout(self.mainDashBoard)
         self.verticalLayout_6.setSpacing(0)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.mainframe_dash = QFrame(self.page_1)
+        self.mainframe_dash = QFrame(self.mainDashBoard)
         self.mainframe_dash.setObjectName(u"mainframe_dash")
         self.mainframe_dash.setFrameShape(QFrame.StyledPanel)
         self.mainframe_dash.setFrameShadow(QFrame.Raised)
@@ -591,14 +591,14 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addWidget(self.mainframe_dash)
 
-        self.stackedWidget.addWidget(self.page_1)
-        self.page_3 = QWidget()
-        self.page_3.setObjectName(u"page_3")
-        self.verticalLayout_8 = QVBoxLayout(self.page_3)
+        self.responsivePages.addWidget(self.mainDashBoard)
+        self.Transactions = QWidget()
+        self.Transactions.setObjectName(u"Transactions")
+        self.verticalLayout_8 = QVBoxLayout(self.Transactions)
         self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName(u"verticalLayout_8")
         self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.frame = QFrame(self.page_3)
+        self.frame = QFrame(self.Transactions)
         self.frame.setObjectName(u"frame")
         self.frame.setFrameShape(QFrame.StyledPanel)
         self.frame.setFrameShadow(QFrame.Raised)
@@ -617,75 +617,74 @@ class Ui_MainWindow(object):
         self.frame_4.setGeometry(QRect(160, 260, 120, 80))
         self.frame_4.setFrameShape(QFrame.StyledPanel)
         self.frame_4.setFrameShadow(QFrame.Raised)
-
         self.verticalLayout_8.addWidget(self.frame)
 
-        self.stackedWidget.addWidget(self.page_3)
+        self.responsivePages.addWidget(self.Transactions)
 
-        self.verticalLayout_5.addWidget(self.stackedWidget)
+        self.verticalLayout_5.addWidget(self.responsivePages)
 
         self.horizontalLayout_2.addWidget(self.frame_pages)
 
         self.verticalLayout.addWidget(self.Content)
 
-        MainWindow.setCentralWidget(self.centralwidget)
+        DashBoard.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
+        self.retranslateUi(DashBoard)
 
-        self.stackedWidget.setCurrentIndex(2)
+        self.responsivePages.setCurrentIndex(0)
 
-        QMetaObject.connectSlotsByName(MainWindow)
+        QMetaObject.connectSlotsByName(DashBoard)
     # setupUi
 
-    def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate(
-            "MainWindow", u"MainWindow", None))
+    def retranslateUi(self, DashBoard):
+        DashBoard.setWindowTitle(QCoreApplication.translate(
+            "DashBoard", u"DashBoard", None))
         self.Btn_Toggle.setText("")
         self.dashboard_top.setText(QCoreApplication.translate(
-            "MainWindow", u"Dashboard", None))
+            "DashBoard", u"Dashboard", None))
         self.name_top.setText(QCoreApplication.translate(
-            "MainWindow", u"Welcome, Name here", None))
+            "DashBoard", u"Welcome, Name here", None))
         self.btn_page_1.setText("")
         self.btn_page_2.setText("")
         self.btn_page_3.setText("")
         self.company_name.setText(
-            QCoreApplication.translate("MainWindow", u"ETERNUS", None))
+            QCoreApplication.translate("DashBoard", u"ETERNUS", None))
         self.company_logo.setText("")
         self.acc_number.setText(QCoreApplication.translate(
-            "MainWindow", u"number", None))
+            "DashBoard", u"number", None))
         self.card_holder.setText(QCoreApplication.translate(
-            "MainWindow", u"Card Holder:", None))
+            "DashBoard", u"Card Holder:", None))
         self.name_card.setText(
-            QCoreApplication.translate("MainWindow", u"Name", None))
+            QCoreApplication.translate("DashBoard", u"Name", None))
         self.expiry_date.setText(
-            QCoreApplication.translate("MainWindow", u"23/09", None))
+            QCoreApplication.translate("DashBoard", u"23/09", None))
         self.payment.setText(QCoreApplication.translate(
-            "MainWindow", u"Payment Details:", None))
+            "DashBoard", u"Payment Details:", None))
         self.number_2.setText(QCoreApplication.translate(
-            "MainWindow", u"Number", None))
+            "DashBoard", u"Number", None))
         self.name_2.setText(QCoreApplication.translate(
-            "MainWindow", u"Name", None))
+            "DashBoard", u"Name", None))
         self.month.setText(QCoreApplication.translate(
-            "MainWindow", u"month", None))
+            "DashBoard", u"month", None))
         self.year.setText(QCoreApplication.translate(
-            "MainWindow", u"year", None))
+            "DashBoard", u"year", None))
         self.copy.setText(QCoreApplication.translate(
-            "MainWindow", u"Copy Details", None))
+            "DashBoard", u"Copy Details", None))
         self.reveal.setText(QCoreApplication.translate(
-            "MainWindow", u"Reveal", None))
+            "DashBoard", u"Reveal", None))
         self.name.setText(QCoreApplication.translate(
-            "MainWindow", u"ETERNUS", None))
+            "DashBoard", u"ETERNUS", None))
         self.logo.setText("")
         self.number.setText(QCoreApplication.translate(
-            "MainWindow", u"123123-123123-123-123", None))
+            "DashBoard", u"123123-123123-123-123", None))
         self.expiry.setText(QCoreApplication.translate(
-            "MainWindow", u"02/23", None))
+            "DashBoard", u"02/23", None))
         self.balance_label.setText(
-            QCoreApplication.translate("MainWindow", u"Balance:", None))
+            QCoreApplication.translate("DashBoard", u"Balance:", None))
         self.money_label.setText(QCoreApplication.translate(
-            "MainWindow", u"$203300", None))
+            "DashBoard", u"$203300", None))
         self.income.setText(QCoreApplication.translate(
-            "MainWindow", u"Average Income:$12000", None))
+            "DashBoard", u"Average Income:$12000", None))
         self.expense.setText(QCoreApplication.translate(
-            "MainWindow", u"Average Expense: $1200", None))
+            "DashBoard", u"Average Expense: $1200", None))
     # retranslateUi

@@ -4,7 +4,7 @@ import create_account
 import time
 import sys
 import importlib
-from main import HomeWindow
+from main import Home
 import intro_bank
 from PyQt5 import QtCore, QtGui, QtWidgets
 import main
@@ -13,7 +13,7 @@ importlib.reload(login)
 importlib.reload(create_account)
 
 
-class MasterGUI(intro_bank.IntroPage, create_account.Ui_CreateAccount, login.Ui_Login, main.HomeWindow):
+class MasterGUI(intro_bank.IntroPage, create_account.Ui_CreateAccount, login.Ui_Login, main.Home):
     def __init__(self):
         intro_bank.IntroPage.__init__(self)
     def loginUser(self):
@@ -29,5 +29,5 @@ class MasterGUI(intro_bank.IntroPage, create_account.Ui_CreateAccount, login.Ui_
         
     def openHomeWindow(self):
         self.MainWindow.close()
-        HomeWindow.__init__(self)
+        Home.__init__(self)
     

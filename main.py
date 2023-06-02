@@ -6,12 +6,12 @@ from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFo
 from PySide2.QtWidgets import *
 
 # GUI FILE
-from ui_main import Ui_MainWindow
+from ui_main import DashBoard
 
 # IMPORT FUNCTIONS
 from ui_functions import *
 
-class HomeWindow(QMainWindow, Ui_MainWindow):
+class Home(QMainWindow, DashBoard):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
@@ -24,13 +24,13 @@ class HomeWindow(QMainWindow, Ui_MainWindow):
         ########################################################################
 
         # PAGE 1
-        self.btn_page_1.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_1))
+        self.btn_page_1.clicked.connect(lambda: self.responsivePages.setCurrentWidget(self.mainDashBoard))
 
         # PAGE 2
-        self.btn_page_2.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_2))
+        self.btn_page_2.clicked.connect(lambda: self.responsivePages.setCurrentWidget(self.card_page))
 
         # PAGE 3
-        self.btn_page_3.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_3))
+        self.btn_page_3.clicked.connect(lambda: self.responsivePages.setCurrentWidget(self.Transactions))
 
 
         ## SHOW ==> MAIN WINDOW

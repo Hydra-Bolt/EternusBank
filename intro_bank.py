@@ -2,7 +2,7 @@ import resource_rc
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class IntroPage(object):
+class IntroPage:
     def setupUi_intro(self, MainWindow:QtWidgets.QMainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1200, 800)

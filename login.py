@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Login(object):
+class Ui_Login:
     def setupUi_login(self, Login):
         Login.setObjectName("Login")
         Login.resize(1200, 600)

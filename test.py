@@ -79,3 +79,7 @@
 # m = Medical_Test('DR.XYZ', 'MALIR', 'NEUROLOGY', 'MR.XYZ',
 #                  'NAZIMABAD', 'BRAIN TUMOR', 'MRI')
 # m.print_test_info()
+
+hehe = {"hee":1}
+print(hehe.update({2:3}))
+print(hehe)
