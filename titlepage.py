@@ -9,7 +9,7 @@ class IntroPage(object):
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(984, 668)
         MainWindow.setStyleSheet(u"* {\n"
-                                 "background-color: rgb(248, 248, 246);\n"
+                                 "background-color:white;\n"
                                  "}\n"
                                  "")
         self.centralwidget = QWidget(MainWindow)

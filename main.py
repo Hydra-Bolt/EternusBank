@@ -15,7 +15,6 @@ class Home(QMainWindow, DashBoard):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setupUi(self)
-
         ## TOGGLE/BURGUER MENU
         ########################################################################
         self.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 150, True))
@@ -27,7 +26,7 @@ class Home(QMainWindow, DashBoard):
         self.btn_page_1.clicked.connect(lambda: self.responsivePages.setCurrentWidget(self.mainDashBoard))
 
         # PAGE 2
-        self.btn_page_2.clicked.connect(lambda: self.responsivePages.setCurrentWidget(self.card_page))
+        self.btn_page_2.clicked.connect(lambda: self.responsivePages.setCurrentWidget(self.cardpage))
 
         # PAGE 3
         self.btn_page_3.clicked.connect(lambda: self.responsivePages.setCurrentWidget(self.Transactions))

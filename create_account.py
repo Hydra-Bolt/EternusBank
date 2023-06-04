@@ -8,6 +8,8 @@ class Ui_CreateAccount:
         CreateAccount.setMinimumSize(QtCore.QSize(1200, 0))
         CreateAccount.setMaximumSize(QtCore.QSize(1200, 600))
         CreateAccount.setStyleSheet("background-color: rgb(241, 252, 243);")
+        
+        
         self.centralwidget = QtWidgets.QWidget(CreateAccount)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)

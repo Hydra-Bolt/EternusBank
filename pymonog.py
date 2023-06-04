@@ -10,5 +10,7 @@ uri = "mongodb+srv://muneeb:seen123@muneeb.ibv9fe8.mongodb.net/?retryWrites=true
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
 db = client["Bank"]
-collection = db["Banking"]
-collection.insert_one({"name":"muneeb","cnic":42201449132433})
+collection = db["AccountInfo"]
+
+x = collection.delete_many({})
+print(x.deleted_count, " documents deleted.")
