@@ -13,4 +13,6 @@ db = client["Bank"]
 collection = db["AccountInfo"]
 
 x = collection.delete_many({})
+
+collection.find_one
 print(x.deleted_count, " documents deleted.")
