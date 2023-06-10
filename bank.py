@@ -53,7 +53,7 @@ class Bank(DesignClass.MasterGUI):
 
         print(account_number)
 
-        # List of account information fields
+        # List of account self.information fields
         accounts = ["Account Name", "Account Number", "Account Type", "Password"]
 
         # List of account data entered by the user
@@ -62,20 +62,22 @@ class Bank(DesignClass.MasterGUI):
         # Create a dictionary with the filling data and corresponding user-entered data
         self.output = {filling_data[i]: list_of_data[i] for i in range(len(list_of_data))}
 
-        # Check if any of the required information fields are empty
-        infolist = [i == "" for i in list_of_data]
+        # Check if any of the required self.information fields are empty
+        self.infolist = [i == "" for i in list_of_data]
         accountlist = [i == "" for i in accounts_data]
 
         # Display an error message if any required field is empty
-        if any(infolist) or any(accountlist):
+        if any(self.infolist) or any(accountlist):
             try:
-                print(f"{filling_data[infolist.index(True)]} isn't filled")
+                print(f"{filling_data[self.infolist.index(True)]} isn't filled")
+                
             except Exception:
                 print(f"{accounts[accountlist.index(True)]} isn't filled")
+            return
         else:
-            # Create dictionaries for user information and account information
+            # Create dictionaries for user self.information and account self.information
 
-            info = {filling_data[i]: list_of_data[i] for i in range(len(list_of_data))}
+            self.info = {filling_data[i]: list_of_data[i] for i in range(len(list_of_data))}
             self.account = {accounts[i]: accounts_data[i] for i in range(len(accounts_data))}
             if self.account["Account Type"] != "Loan Account":
                 self.account["Balance"] = 0
@@ -95,44 +97,46 @@ class Bank(DesignClass.MasterGUI):
                 print("ran")
             # Check if the user already exists in the database
 
-            result = list(self.userAccountInfo.find({"CNIC": info["CNIC"]}))
-            if result != []:
-                print("found")
-                update = {"$push": {"Accounts": self.account}}
-                self.userAccountInfo.update_one({"CNIC": info["CNIC"]}, update=update)
-            else:
-                print('here')
-                info |= {"Accounts": [self.account]}
-                self.userAccountInfo.insert_one(info)
             if self.account["Account Type"] == "Loan Account":
                 return
+            result = list(self.userAccountInfo.find({"CNIC": self.info["CNIC"]}))
+            if result != []:
+                print("found")
+                self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0]["Accounts"].append(self.account)
+                self.userAccountInfo.updateDB()
+            else:
+                print('here')
+                self.info |= {"Accounts": [self.account]}
+                self.userAccountInfo.insert(self.info)
             self.openHomeWindow()
-    
+            
+            
     def checkCredentials(self):
         filling_data = ["CNIC", "Account Name", "Password"]
         list_of_data = [self.cnic_line_edit.text(),self.account_edit_login.text(),self.password_login_edit.text()]
-        infolist = [i == "" for i in list_of_data]
-        if any(infolist):
-            print(f"{filling_data[infolist.index(True)]} isnt filled")
+        self.infolist = [i == "" for i in list_of_data]
+        if any(self.infolist):
+            print(f"{filling_data[self.infolist.index(True)]} isnt filled")
         else:
-            info = {filling_data[i]: list_of_data[i] for i in range(len(list_of_data))}
-            self.output = self.userAccountInfo.find_one({"CNIC":info["CNIC"]})
+            self.info = {filling_data[i]: list_of_data[i] for i in range(len(list_of_data))}
+            self.output = self.userAccountInfo.find({"CNIC":self.info["CNIC"]})
 
             print(self.output)
-            if self.output is None:
+            if self.output == []:
                 print("dont have an account")
             else:
-                accounts = self.output["Accounts"]
+                accounts = self.output[0]["Accounts"]
                 for account in accounts:
-                    if account["Account Name"] == info["Account Name"]:
+                    if account["Account Name"] == self.info["Account Name"]:
                         break
                 else:
                        
                     print("Incorrect Account Name")
-                if account["Password"] != info["Password"]:
+                if account["Password"] != self.info["Password"]:
                     print("Incorrect Password")
                 elif account["Account Type"] == "Loan Account":
                     self.account = account
+                    
                     self.openLoanWindow()
                 else:
                     self.account = account
@@ -158,31 +162,40 @@ class Bank(DesignClass.MasterGUI):
             self.checkingAccount()
         else:
             
-            self.overdraft.setText(f"{self.account['Interest Rate']*self.account['Balance']}")
+            self.overdraft.setText(f"+{self.account['Interest Rate']*self.account['Balance']}")
             self.savingsAccount()
     def setupDB(self):
-                
-        from pymongo.mongo_client import MongoClient
-        from pymongo.server_api import ServerApi
-        import pymongo
-        uri = "mongodb+srv://muneeb:seen123@muneeb.ibv9fe8.mongodb.net/?retryWrites=true&w=majority"
-        # Create a new client and connect to the server
-        client = MongoClient(uri, server_api=ServerApi('1'))
-        db = client["Bank"]
-        self.userAccountInfo = db["AccountInfo"]
-    def accept(self):
+        from database import Hakoniwa
         
-        self.account["Loan"] = -int(self.loan_amount.text())
+        self.userAccountInfo = Hakoniwa("DB.json")
+        print(self.userAccountInfo)
+    def accept(self):
+        self.account["Loan"] = int(self.loan_amount.text())
+        self.account["Added"] = int(self.loan_amount.text()*0.06)
+        self.account["Net Pay"] = int(self.loan_amount.text()) + int(self.loan_amount.text()*0.06)
         print(self.account["Loan"])
+        print(self.account)
+        self.loan_application.close()
+        if list(self.userAccountInfo.find({"CNIC": self.info["CNIC"]})) != []:
+            print("found")
+            self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0]["Accounts"].append(self.account)
+            self.userAccountInfo.updateDB()
+        else:
+            print('here')
+            self.info |= {"Accounts": [self.account]}
+            self.userAccountInfo.insert(self.info)
         self.openLoanWindow()
     def openLoanWindow(self):
         
-        self.loan_application.close()
+
         self.setupUi_loan(self.MainWindow)
+        
         self.MainWindow.show()
-        
-    def reject(self):
-        
+        self.loan_taken.setText(f"${self.account['Loan']}")
+        self.interest.setText(f"${self.account['Loan']*0.06}")
+        self.total_repay.setText(f"${self.account['Loan']+self.account['Loan']*0.06}")
+        self.name_loan.setText(f"{self.output['Full Name']}")
+    def reject(self):        
         self.loan_application.close()
         self.MainWindow.close()
         
@@ -190,7 +203,7 @@ class Bank(DesignClass.MasterGUI):
         pass 
     def savingsAccount(self):
         pass
-    
+
 app = QtWidgets.QApplication(sys.argv)
 
 MainWindow = QtWidgets.QMainWindow()

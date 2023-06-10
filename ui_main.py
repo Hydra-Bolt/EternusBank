@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-# Form generated from reading UI file 'ui_mainvwoPQu.ui'
+# Form generated from reading UI file 'ui_mainDoeBIU.ui'
 ##
 # Created by: Qt User Interface Compiler version 5.15.2
 ##
@@ -41,7 +41,8 @@ class DashBoard(object):
         self.frame_toggle = QFrame(self.Top_Bar)
         self.frame_toggle.setObjectName(u"frame_toggle")
         self.frame_toggle.setMaximumSize(QSize(70, 40))
-        self.frame_toggle.setStyleSheet("\n"
+        self.frame_toggle.setStyleSheet(u"*{\n"
+                                        "boder:0}\n"
                                         "\n"
                                         "QPushButton:hover {\n"
                                         "	background-color:#f1fcf3;\n"
@@ -201,7 +202,7 @@ class DashBoard(object):
         self.verticalLayout_5.setContentsMargins(0, 0, 0, -1)
         self.responsivePages = QStackedWidget(self.frame_pages)
         self.responsivePages.setObjectName(u"responsivePages")
-        
+        self.responsivePages.setStyleSheet(u"display:none;")
         self.cardpage = QWidget()
         self.cardpage.setObjectName(u"cardpage")
         self.verticalLayout_7 = QVBoxLayout(self.cardpage)
@@ -410,7 +411,7 @@ class DashBoard(object):
                                 "border-radius:7px;\n"
                                 "background-color:#28b44c;\n"
                                 "")
-
+        self.copy.clicked.connect(lambda:self.buttonclick(self.copy))
         self.horizontalLayout_14.addWidget(self.copy)
 
         self.reveal = QPushButton(self.buttons_for_card)
@@ -421,7 +422,7 @@ class DashBoard(object):
                                   "padding-left:5px;\n"
                                   "border-radius:7px;\n"
                                   "background-color:#28b44c;")
-
+        self.reveal.clicked.connect(lambda:self.buttonclick(self.reveal))
         self.horizontalLayout_14.addWidget(self.reveal)
 
         self.verticalLayout_13.addWidget(self.buttons_for_card)
@@ -586,6 +587,108 @@ class DashBoard(object):
         self.transactions.setObjectName(u"transactions")
         self.transactions.setFrameShape(QFrame.StyledPanel)
         self.transactions.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_21 = QVBoxLayout(self.transactions)
+        self.verticalLayout_21.setObjectName(u"verticalLayout_21")
+        self.recent_transactions = QLabel(self.transactions)
+        self.recent_transactions.setObjectName(u"recent_transactions")
+        self.recent_transactions.setMaximumSize(QSize(16777215, 40))
+        self.recent_transactions.setStyleSheet(
+            u"color:green;font: 24pt \"Modern No. 20\";")
+
+        self.verticalLayout_21.addWidget(self.recent_transactions)
+
+        self.transaction_1 = QFrame(self.transactions)
+        self.transaction_1.setObjectName(u"transaction_1")
+        self.transaction_1.setFrameShape(QFrame.StyledPanel)
+        self.transaction_1.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_19 = QHBoxLayout(self.transaction_1)
+        self.horizontalLayout_19.setObjectName(u"horizontalLayout_19")
+        self.amount_1 = QLabel(self.transaction_1)
+        self.amount_1.setObjectName(u"amount_1")
+
+        self.horizontalLayout_19.addWidget(self.amount_1)
+
+        self.details_1 = QFrame(self.transaction_1)
+        self.details_1.setObjectName(u"details_1")
+        self.details_1.setFrameShape(QFrame.StyledPanel)
+        self.details_1.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_25 = QVBoxLayout(self.details_1)
+        self.verticalLayout_25.setObjectName(u"verticalLayout_25")
+        self.withdrawn_1 = QLabel(self.details_1)
+        self.withdrawn_1.setObjectName(u"withdrawn_1")
+
+        self.verticalLayout_25.addWidget(self.withdrawn_1)
+
+        self.date_1 = QLabel(self.details_1)
+        self.date_1.setObjectName(u"date_1")
+
+        self.verticalLayout_25.addWidget(self.date_1)
+
+        self.horizontalLayout_19.addWidget(self.details_1)
+
+        self.verticalLayout_21.addWidget(self.transaction_1)
+
+        self.transaction_2 = QFrame(self.transactions)
+        self.transaction_2.setObjectName(u"transaction_2")
+        self.transaction_2.setFrameShape(QFrame.StyledPanel)
+        self.transaction_2.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_18 = QHBoxLayout(self.transaction_2)
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.amount_2 = QLabel(self.transaction_2)
+        self.amount_2.setObjectName(u"amount_2")
+
+        self.horizontalLayout_18.addWidget(self.amount_2)
+
+        self.details_2 = QFrame(self.transaction_2)
+        self.details_2.setObjectName(u"details_2")
+        self.details_2.setFrameShape(QFrame.StyledPanel)
+        self.details_2.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_24 = QVBoxLayout(self.details_2)
+        self.verticalLayout_24.setObjectName(u"verticalLayout_24")
+        self.withdraw_2 = QLabel(self.details_2)
+        self.withdraw_2.setObjectName(u"withdraw_2")
+
+        self.verticalLayout_24.addWidget(self.withdraw_2)
+
+        self.date_2 = QLabel(self.details_2)
+        self.date_2.setObjectName(u"date_2")
+
+        self.verticalLayout_24.addWidget(self.date_2)
+
+        self.horizontalLayout_18.addWidget(self.details_2)
+
+        self.verticalLayout_21.addWidget(self.transaction_2)
+
+        self.transaction_3 = QFrame(self.transactions)
+        self.transaction_3.setObjectName(u"transaction_3")
+        self.transaction_3.setFrameShape(QFrame.StyledPanel)
+        self.transaction_3.setFrameShadow(QFrame.Raised)
+        self.horizontalLayout_20 = QHBoxLayout(self.transaction_3)
+        self.horizontalLayout_20.setObjectName(u"horizontalLayout_20")
+        self.amount_3 = QLabel(self.transaction_3)
+        self.amount_3.setObjectName(u"amount_3")
+
+        self.horizontalLayout_20.addWidget(self.amount_3)
+
+        self.details_3 = QFrame(self.transaction_3)
+        self.details_3.setObjectName(u"details_3")
+        self.details_3.setFrameShape(QFrame.StyledPanel)
+        self.details_3.setFrameShadow(QFrame.Raised)
+        self.verticalLayout_26 = QVBoxLayout(self.details_3)
+        self.verticalLayout_26.setObjectName(u"verticalLayout_26")
+        self.withdraw_3 = QLabel(self.details_3)
+        self.withdraw_3.setObjectName(u"withdraw_3")
+
+        self.verticalLayout_26.addWidget(self.withdraw_3)
+
+        self.date_3 = QLabel(self.details_3)
+        self.date_3.setObjectName(u"date_3")
+
+        self.verticalLayout_26.addWidget(self.date_3)
+
+        self.horizontalLayout_20.addWidget(self.details_3)
+
+        self.verticalLayout_21.addWidget(self.transaction_3)
 
         self.verticalLayout_9.addWidget(self.transactions)
 
@@ -642,7 +745,7 @@ class DashBoard(object):
         self.horizontalLayout_16.addWidget(self.balance_amount)
 
         self.overdraft = QLabel(self.Balance)
-        self.overdraft.setObjectName(u"label")
+        self.overdraft.setObjectName(u"overdraft")
         self.overdraft.setStyleSheet(
             u"color:green;border:0;border-radius:5px;font: 25pt \"Modern No. 20\";")
 
@@ -692,7 +795,7 @@ class DashBoard(object):
                                    "font: 15pt \"Modern No. 20\";\n"
                                    "padding:6px 12px;\n"
                                    "background-color:#28b44c;")
-
+        self.deposit.clicked.connect(lambda:self.buttonclick(self.deposit))
         self.verticalLayout_18.addWidget(self.deposit, 0, Qt.AlignHCenter)
 
         self.verticalLayout_17.addWidget(self.deposit_frame)
@@ -726,7 +829,7 @@ class DashBoard(object):
                                     "font: 15pt \"Modern No. 20\";\n"
                                     "padding:6px 12px;\n"
                                     "background-color:#28b44c;")
-
+        self.withdraw.clicked.connect(lambda:self.buttonclick(self.withdraw))
         self.verticalLayout_17.addWidget(self.withdraw, 0, Qt.AlignHCenter)
 
         self.verticalLayout_16.addWidget(self.withdraw_frame)
@@ -737,8 +840,8 @@ class DashBoard(object):
         self.transfer_frame.setObjectName(u"transfer_frame")
         self.transfer_frame.setFrameShape(QFrame.StyledPanel)
         self.transfer_frame.setFrameShadow(QFrame.Raised)
-        self.verticalLayout_22 = QVBoxLayout(self.transfer_frame)
-        self.verticalLayout_22.setObjectName(u"verticalLayout_22")
+        self.verticalLayout_19 = QVBoxLayout(self.transfer_frame)
+        self.verticalLayout_19.setObjectName(u"verticalLayout_19")
         self.trasnsfer = QFrame(self.transfer_frame)
         self.trasnsfer.setObjectName(u"trasnsfer")
         self.trasnsfer.setStyleSheet(u"border-bottom:3px dotted gray;")
@@ -768,7 +871,7 @@ class DashBoard(object):
         self.verticalLayout_20.addWidget(
             self.transfer_amount, 0, Qt.AlignHCenter)
 
-        self.verticalLayout_22.addWidget(self.trasnsfer)
+        self.verticalLayout_19.addWidget(self.trasnsfer)
 
         self.select_label = QLabel(self.transfer_frame)
         self.select_label.setObjectName(u"select_label")
@@ -778,14 +881,24 @@ class DashBoard(object):
                                         "color:green;\n"
                                         "")
 
-        self.verticalLayout_22.addWidget(self.select_label, 0, Qt.AlignHCenter)
+        self.verticalLayout_19.addWidget(self.select_label)
 
         self.listofaccounts = QComboBox(self.transfer_frame)
         self.listofaccounts.setObjectName(u"listofaccounts")
         self.listofaccounts.setStyleSheet(u"border:2px solid black;color: gray;border-radius:6px;padding:10px 6px;font: 18pt \"Modern No. 20\";\n"
                                           "")
 
-        self.verticalLayout_22.addWidget(self.listofaccounts)
+        self.verticalLayout_19.addWidget(self.listofaccounts)
+
+        self.transfer_button = QPushButton(self.transfer_frame)
+        self.transfer_button.setObjectName(u"transfer_button")
+        self.transfer_button.setStyleSheet(u"border:2px solid black;\n"
+                                     "border-radius:4px;\n"
+                                     "font: 15pt \"Modern No. 20\";\n"
+                                     "padding:6px 12px;\n"
+                                     "background-color:#28b44c;")
+        self.transfer_button.clicked.connect(lambda:self.buttonclick(self.transfer_button))
+        self.verticalLayout_19.addWidget(self.transfer_button, 0, Qt.AlignHCenter)
 
         self.horizontalLayout_15.addWidget(self.transfer_frame)
 
@@ -859,6 +972,26 @@ class DashBoard(object):
             "MainWindow", u"Average Income:$12000", None))
         self.expense.setText(QCoreApplication.translate(
             "MainWindow", u"Average Expense: $1200", None))
+        self.recent_transactions.setText(QCoreApplication.translate(
+            "MainWindow", u"Recent Transactions:", None))
+        self.amount_1.setText(QCoreApplication.translate(
+            "MainWindow", u"amount", None))
+        self.withdrawn_1.setText(QCoreApplication.translate(
+            "MainWindow", u"withdrawn", None))
+        self.date_1.setText(QCoreApplication.translate(
+            "MainWindow", u"date", None))
+        self.amount_2.setText(QCoreApplication.translate(
+            "MainWindow", u"amount", None))
+        self.withdraw_2.setText(QCoreApplication.translate(
+            "MainWindow", u"withdrawn", None))
+        self.date_2.setText(QCoreApplication.translate(
+            "MainWindow", u"date", None))
+        self.amount_3.setText(QCoreApplication.translate(
+            "MainWindow", u"amount", None))
+        self.withdraw_3.setText(QCoreApplication.translate(
+            "MainWindow", u"withdrawn", None))
+        self.date_3.setText(QCoreApplication.translate(
+            "MainWindow", u"date", None))
         self.balance_label_tramsaction.setText(
             QCoreApplication.translate("MainWindow", u"Balance: ", None))
         self.balance_amount.setText(
@@ -885,4 +1018,6 @@ class DashBoard(object):
             QCoreApplication.translate("MainWindow", u"$200", None))
         self.select_label.setText(QCoreApplication.translate(
             "MainWindow", u"Select the account the transfer to:", None))
+        self.transfer_button.setText(QCoreApplication.translate(
+            "MainWindow", u"Transfer", None))
     # retranslateUi

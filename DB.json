@@ -1,0 +1,155 @@
+[
+  {
+    "Full Name": "Muneeb",
+    "CNIC": "muneeb",
+    "Accounts": [
+      {
+        "Account Name": "muneb",
+        "Account Number": "ETR-446997-525333",
+        "Account Type": "Savings Account",
+        "Password": "muneeb",
+        "Balance": 0,
+        "Card Number": "643637738359664",
+        "Expiry Date": [
+          "06/2028",
+          "June",
+          "2028"
+        ],
+        "Transactions": [],
+        "Interest Rate": 2.2831e-06
+      },
+      {
+        "Account Name": "muneeb",
+        "Account Number": "ETR-843417-951173",
+        "Account Type": "Savings Account",
+        "Password": "231",
+        "Balance": 0,
+        "Card Number": "3770161399295818",
+        "Expiry Date": [
+          "06/2028",
+          "June",
+          "2028"
+        ],
+        "Transactions": [],
+        "Interest Rate": 2.2831e-06
+      },
+      {
+        "Account Name": "muneeb",
+        "Account Number": "ETR-195278-409549",
+        "Account Type": "Checking Account",
+        "Password": "muneeb",
+        "Balance": 0,
+        "Card Number": "3775579041316243",
+        "Expiry Date": [
+          "06/2028",
+          "June",
+          "2028"
+        ],
+        "Transactions": [],
+        "Overdraft": 500
+      },
+      {
+        "Account Name": "muneb",
+        "Account Number": "ETR-990929-867669",
+        "Account Type": "Checking Account",
+        "Password": "muneb123",
+        "Balance": 0,
+        "Card Number": "664035660407830",
+        "Expiry Date": [
+          "06/2028",
+          "June",
+          "2028"
+        ],
+        "Transactions": [],
+        "Overdraft": 500
+      },
+      {
+        "Account Name": "muneeb",
+        "Account Number": "ETR-418091-019645",
+        "Account Type": "Savings Account",
+        "Password": "mu123123",
+        "Balance": 0,
+        "Card Number": "569368247267922",
+        "Expiry Date": [
+          "06/2028",
+          "June",
+          "2028"
+        ],
+        "Transactions": [],
+        "Interest Rate": 2.2831e-06
+      }
+    ]
+  },
+  {
+    "Full Name": "asd",
+    "CNIC": "123asd",
+    "Accounts": [
+      {
+        "Account Name": "asd",
+        "Account Number": "ETR-873914-343112",
+        "Account Type": "Loan Account",
+        "Password": "aasd"
+      }
+    ]
+  },
+  {
+    "Full Name": "Muneeb",
+    "CNIC": "1233321",
+    "Accounts": [
+      {
+        "Account Name": "muneeb",
+        "Account Number": "ETR-887211-128501",
+        "Account Type": "Loan Account",
+        "Password": "asdasd",
+        "Loan": 100000
+      }
+    ]
+  },
+  {
+    "Full Name": "Mne",
+    "CNIC": "121121",
+    "Accounts": [
+      {
+        "Account Name": "asd1",
+        "Account Number": "ETR-990520-742630",
+        "Account Type": "Loan Account",
+        "Password": "muneeb",
+        "Loan": 134123
+      }
+    ]
+  },
+  {
+    "Full Name": "123123",
+    "CNIC": "123123",
+    "Accounts": [
+      {
+        "Account Name": "123123",
+        "Account Number": "ETR-842641-577912",
+        "Account Type": "Loan Account",
+        "Password": "123123123",
+        "Loan": 12312312
+      }
+    ]
+  },
+  {
+    "Full Name": "asd",
+    "CNIC": "asd",
+    "Accounts": [
+      {
+        "Account Name": "asd",
+        "Account Number": "ETR-468410-912749",
+        "Account Type": "Checking Account",
+        "Password": "asd",
+        "Balance": 0,
+        "Card Number": "500053975535908",
+        "Expiry Date": [
+          "06/2028",
+          "June",
+          "2028"
+        ],
+        "Transactions": [],
+        "Overdraft": 500
+      }
+    ]
+  }
+]
