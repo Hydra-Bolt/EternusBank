@@ -8,9 +8,7 @@
 
 ## ==> GUI FILE
 from ui_main import DashBoard
-from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtCore import (QCoreApplication, QPropertyAnimation, QDate, QDateTime, QMetaObject, QObject, QPoint, QRect, QSize, QTime, QUrl, Qt, QEvent)
-from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont, QFontDatabase, QIcon, QKeySequence, QLinearGradient, QPalette, QPainter, QPixmap, QRadialGradient)
+from PyQt5 import QtCore, QtWidgets, QtGui
 class UIFunctions:
 
     def toggleMenu(self, maxWidth, enable):
@@ -24,11 +22,39 @@ class UIFunctions:
             # SET MAX WIDTH
             if width == 72:
                 widthExtended = maxExtend
+                common_style = """
+QPushButton {
+    color: black;
+    font: 13pt "Modern No. 20";
+    background-color: rgb(255, 255, 255);
+    border: 0px solid;
+    text-align: left;
+    padding-left: 25px;
+}
+QPushButton:hover {
+    background-color: #f1fcf3;
+}
+"""
+                self.btn_page_1.setText("Dashboard")
+                self.btn_page_1.setStyleSheet(common_style)
+
+                self.btn_page_2.setText("Card")
+                self.btn_page_2.setStyleSheet(common_style)
+
+                self.btn_page_3.setText("Transactions")
+                self.btn_page_3.setStyleSheet(common_style)
+
+                self.logout_button.setText("Logout")
+                self.logout_button.setStyleSheet(common_style)
             else:
                 widthExtended = standard
+                self.btn_page_1.setText("")
+                self.btn_page_2.setText("")
+                self.btn_page_3.setText("")
+                self.logout_button.setText("")
 
             # ANIMATION
-            self.animation = QPropertyAnimation(self.frame_left_menu, b"minimumWidth")
+            self.animation = QtCore.QPropertyAnimation(self.frame_left_menu, b"minimumWidth")
             self.animation.setDuration(400)
             self.animation.setStartValue(width)
             self.animation.setEndValue(widthExtended)

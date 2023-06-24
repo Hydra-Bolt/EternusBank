@@ -1,13 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from abc import ABC, abstractmethod
 
-
-class Ui_CreateAccount:
+class CreateAccount(ABC):
     def setupUi_create(self, CreateAccount):
         CreateAccount.setObjectName("CreateAccount")
         CreateAccount.resize(1200, 600)
         CreateAccount.setMinimumSize(QtCore.QSize(1200, 0))
         CreateAccount.setMaximumSize(QtCore.QSize(1200, 600))
-        CreateAccount.setStyleSheet("background-color: rgb(241, 252, 243);")
+        CreateAccount.setStyleSheet("background-color: #f8f8f6;")
         
         
         self.centralwidget = QtWidgets.QWidget(CreateAccount)
@@ -24,7 +24,6 @@ class Ui_CreateAccount:
         self.message.setStyleSheet("QLabel {\n"
                                    "    font: 58pt \"Modern No. 20\";\n"
                                    "    color:green;\n"
-                                   "    text-shadow: 2px 2px 4px #000000\n"
                                    "\n"
                                    "}")
         self.message.setObjectName("message")
@@ -57,6 +56,7 @@ class Ui_CreateAccount:
                                     "    border-radius:5px;\n"
                                     "}")
         self.fullname.setObjectName("fullname")
+        self.fullname.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[A-Za-z ]+"), self.fullname))
         self.verticalLayout.addWidget(self.fullname)
         self.account_name_label = QtWidgets.QLabel(self.label_frames)
         self.account_name_label.setMaximumSize(QtCore.QSize(16777215, 20))
@@ -95,6 +95,7 @@ class Ui_CreateAccount:
                                 "    border-radius:5px;\n"
                                 "}")
         self.cnic.setObjectName("cnic")
+        self.cnic.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]{13}"), self.cnic))
         self.verticalLayout.addWidget(self.cnic)
         self.password_create_label = QtWidgets.QLabel(self.label_frames)
         self.password_create_label.setMaximumSize(QtCore.QSize(16777215, 20))
@@ -114,6 +115,7 @@ class Ui_CreateAccount:
                                         "    border-radius:5px;\n"
                                         "}")
         self.password_create.setObjectName("password_create")
+        self.password_create.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout.addWidget(self.password_create)
         self.account_type_label = QtWidgets.QLabel(self.label_frames)
         self.account_type_label.setStyleSheet("* {\n"
@@ -133,9 +135,9 @@ class Ui_CreateAccount:
                                       "    border-radius:5px;\n"
                                       "}")
         self.accountype.setObjectName("accountype")
-        self.accountype.addItem("")
-        self.accountype.addItem("")
-        self.accountype.addItem("")
+        self.accountype.addItem("Checking Account")
+        self.accountype.addItem("Savings Account")
+        self.accountype.addItem("Loan Account")
         self.verticalLayout.addWidget(self.accountype)
         self.submit_buttonframe = QtWidgets.QFrame(self.label_frames)
         self.submit_buttonframe.setMinimumSize(QtCore.QSize(0, 122))
@@ -197,7 +199,9 @@ class Ui_CreateAccount:
         self.accountype.setItemText(2, _translate(
             "CreateAccount", "Checking Account"))
         self.submit_button_create.setText(_translate("CreateAccount", "Submit"))
-    def createAccount(self):pass
+    @abstractmethod
+    def createAccount(self):
+        pass
 
 if __name__ == "__main__":
     import sys

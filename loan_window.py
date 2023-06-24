@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from abc import ABC, abstractmethod
 
-class Loan:
+class Loan(ABC):
     def setupUi_loan(self, MainWindow):
         # Setup the UI for the loan application window
         MainWindow.setObjectName("MainWindow")
@@ -116,6 +117,7 @@ class Loan:
         self.repay_submit = QtWidgets.QPushButton(self.repay_edit_frame)
         self.repay_submit.setStyleSheet("border:2px solid black;border-radius:6px;font: 18pt \"Modern No. 20\";background-color:#28b44c;padding:6px 15px")
         self.repay_submit.setObjectName("repay_submit")
+        self.repay_submit.clicked.connect(self.repay_money)
         self.verticalLayout_4.addWidget(self.repay_submit, 0, QtCore.Qt.AlignHCenter)
 
         self.verticalLayout_3.addWidget(self.repay_edit_frame)
@@ -139,7 +141,9 @@ class Loan:
         self.repay.setText(_translate("MainWindow", "Repay your loan:"))
         self.repay_edit.setText(_translate("MainWindow", "$"))
         self.repay_submit.setText(_translate("MainWindow", "Repay"))
-
+    @abstractmethod
+    def repay_money(self):
+        pass
 
 if __name__ == "__main__":
     import sys

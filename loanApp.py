@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+from abc import ABC, abstractmethod
 
-
-class LoanApp:
+class LoanApp(ABC):
     def setupLoanApp(self, Loan):
         # Set up the main window properties
         Loan.setObjectName("Loan")
@@ -27,6 +27,7 @@ class LoanApp:
         
         # Add a line edit for loan amount input to the vertical layout
         self.loan_amount = QtWidgets.QLineEdit(Loan)
+        self.loan_amount.setValidator(QtCore.QRegExp())
         self.loan_amount.setStyleSheet("font: 16pt \"Modern No. 20\";border-radius:5px;border:1px solid black;padding:6px")
         self.loan_amount.setObjectName("loan_amount")
         self.verticalLayout.addWidget(self.loan_amount)
@@ -60,8 +61,12 @@ class LoanApp:
         self.welcome_loan.setText(_translate("Loan", "Welcome to Loan Account:"))
         self.ask_loan.setText(_translate("Loan", "What will be your starting Loan?"))
         self.loan_amount.setPlaceholderText(_translate("Loan", "Enter here"))
-
-
+    @abstractmethod
+    def accept(self):
+        pass
+    @abstractmethod
+    def reject(self):
+        pass
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

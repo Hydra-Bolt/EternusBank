@@ -10,7 +10,7 @@ class Account:
     def withdraw(self, amount):
         if self.balance > amount:
             self.balance -= amount
-
+        return self.balance
     def balanceInquiry(self):
         return self.balance
 
@@ -27,6 +27,7 @@ class CheckingAccount(Account):
     def withdraw(self, amount):
         if self.balance+self.overdraft > amount:
             self.balance -= amount
+        return self.balance
 
 
 class Loan(Account):

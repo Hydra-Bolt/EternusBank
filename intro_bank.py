@@ -1,15 +1,18 @@
-import resource_rc
-from PyQt5 import QtCore, QtGui, QtWidgets
-import time
 
-class IntroPage:
+
+
+from abc import ABC, abstractmethod
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class IntroPage(ABC):
+    
     def setupUi_intro(self, MainWindow: QtWidgets.QMainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1200, 800)
         MainWindow.setMinimumSize(1200, 800)
         # MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         MainWindow.setStyleSheet("* {\n"
-                                 "background-color:#f1fcf3\n"
+                                 "background-color:#f8f8f6\n"
                                  "\n"
                                  "}")
         # self.setWindowIcon(QtGui.QIcon('logo.png'))
@@ -63,10 +66,9 @@ class IntroPage:
         self.verticalLayout_4.addWidget(self.label)
         self.horizontalLayout_3.addWidget(self.frame_2)
         self.frame_3 = QtWidgets.QFrame(self.frame)
-        self.frame_3.setStyleSheet("background-image: url(:/frame/logo.png);\n"
-                                   "background-repeat: no-repeat;\n"
+        self.frame_3.setStyleSheet("background-repeat: no-repeat;\n"
                                    "background-position: center;\n"
-                                   "background-image: url(:/frame/logo.png);\n")
+                                   "background-image: url(icons/logo.png);\n")
         self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_3.setObjectName("frame_3")
@@ -121,7 +123,6 @@ class IntroPage:
                                          "")
         self.create_button.setObjectName("create_button")
         # self.create_button.clicked.connect(lambda: self.buttonclick(self.create_button))
-        self.create_button.clicked.connect(self.createUser)
         self.horizontalLayout_2.addWidget(self.create_button)
         self.login_button = QtWidgets.QPushButton(self.create_login_frame)
         self.login_button.setStyleSheet("QPushButton {\n"
@@ -140,12 +141,12 @@ class IntroPage:
                                         "")
         self.login_button.setObjectName("login_button")
         # self.login_button.clicked.connect(lambda: self.buttonclick(self.login_button))
-        self.login_button.clicked.connect(self.loginUser)
         self.horizontalLayout_2.addWidget(self.login_button)
         self.verticalLayout_2.addWidget(self.create_login_frame)
         self.verticalLayout.addWidget(self.slogan_frame)
         MainWindow.setCentralWidget(self.centralwidget)
-
+        self.create_button.clicked.connect(self.createUser)
+        self.login_button.clicked.connect(self.loginUser)
         self.setUi_intro(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -159,31 +160,12 @@ class IntroPage:
                                       "first step towards everlasting financial stability."))
         self.create_button.setText(_translate("MainWindow", "Create Account"))
         self.login_button.setText(_translate("MainWindow", "Login"))
-
+    @abstractmethod
     def createUser(self):
         pass
-
+    @abstractmethod
     def loginUser(self):
         pass
-    def buttonclick(self, button):
-        init_rect = button.geometry()
-        new_rect = QtCore.QRect(*[int(x / 1.1) for x in init_rect.getRect()])
-        new_rect.translate(init_rect.x() - new_rect.x() + int(new_rect.width() // 20),
-                        init_rect.y() - new_rect.y() + int(new_rect.height() // 20))
-        button.setGeometry(new_rect)
-
-        # Create a QTimer object
-        self.timer = QtCore.QTimer()
-        self.timer.setSingleShot(True)  # Set the timer to fire only once
-
-        def reset_button_geometry():
-            button.setGeometry(init_rect)  # Reset button geometry to original state
-
-        self.timer.timeout.connect(reset_button_geometry)
-
-        # Start the timer with a timeout of 2000 milliseconds (2 seconds)
-        self.timer.start(100)   
-
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
