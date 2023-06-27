@@ -64,15 +64,17 @@ class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login,
         # Start the timer with a timeout of 2000 milliseconds (2 seconds)
         self.timer1.start(100)
         button.setEnabled(False)
+        try:
+            # Create a QTimer object
+            self.timer2 = QtCore.QTimer()
 
-        # Create a QTimer object
-        self.timer2 = QtCore.QTimer()
+            # Set up the timeout function to enable the button after the specified duration
+            self.timer2.timeout.connect(lambda: button.setEnabled(True))
 
-        # Set up the timeout function to enable the button after the specified duration
-        self.timer2.timeout.connect(lambda: button.setEnabled(True))
-
-        # Start the timer
-        self.timer2.start(5000)
+            # Start the timer
+            self.timer2.start(5000)
+        except RuntimeError:
+            pass
 
     # Rest of the code...
 

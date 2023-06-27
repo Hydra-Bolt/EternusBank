@@ -33,9 +33,5 @@ class CheckingAccount(Account):
 class Loan(Account):
     def __init__(self, account_info) -> None:
         self.account_info = account_info
-        self.loan = self.account_info["Loan"]
-        self.interest = self.account_info["Added"]
         self.balance = self.account_info["Net Pay"]
-
-    def deposit(self, amount):
-        return super().deposit(amount)
+        

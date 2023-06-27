@@ -6,9 +6,12 @@ import random
 from datetime import datetime, timedelta, date
 import importlib
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 # importlib.reload(DesignClass)
 from transaction import TransactionWidget
 import pyperclip
+
+
 class Bank(DesignClass.MasterGUI):
     """Bank class represents the main banking application."""
 
@@ -18,17 +21,19 @@ class Bank(DesignClass.MasterGUI):
         self.setupDB()
         self.MainWindow = MainWindow
         self.setupUi_intro(self.MainWindow)
-        self.MainWindow.setWindowIcon(QtGui.QIcon('./icons/logo_title.png'))
+        self.MainWindow.setWindowIcon(QtGui.QIcon("./icons/logo_title.png"))
         self.MainWindow.show()
         self.count = 0
+
     def generate_credit_card_number(self):
         """Generate a random credit card number."""
         # Generate the first 6 digits (Issuer Identification Number)
-        iin = random.choice(['4', '5', '37', '6']) + \
-            ''.join(random.choice('0123456789') for _ in range(5))
+        iin = random.choice(["4", "5", "37", "6"]) + "".join(
+            random.choice("0123456789") for _ in range(5)
+        )
 
         # Generate the remaining digits (Account Number)
-        account_number = ''.join(random.choice('0123456789') for _ in range(9))
+        account_number = "".join(random.choice("0123456789") for _ in range(9))
 
         return iin + account_number
 
@@ -43,7 +48,11 @@ class Bank(DesignClass.MasterGUI):
         # Calculate the maximum expiry date
         max_expiry_date = current_date + max_expiry_duration
 
-        return [max_expiry_date.strftime("%m/%Y"), max_expiry_date.strftime("%B"), max_expiry_date.strftime("%Y")]
+        return [
+            max_expiry_date.strftime("%m/%Y"),
+            max_expiry_date.strftime("%B"),
+            max_expiry_date.strftime("%Y"),
+        ]
 
     def createAccount(self):
         """Create a new bank account for a customer."""
@@ -54,22 +63,30 @@ class Bank(DesignClass.MasterGUI):
         list_of_data = [self.fullname.text(), self.cnic.text()]
 
         # Generate a random account number
-        account_number = "ETR-" + "".join([str(random.randint(0, 9)) for _ in range(6)]) + "-" + "".join(
-            [str(random.randint(0, 9)) for _ in range(6)])
+        account_number = (
+            "ETR-"
+            + "".join([str(random.randint(0, 9)) for _ in range(6)])
+            + "-"
+            + "".join([str(random.randint(0, 9)) for _ in range(6)])
+        )
 
         print(account_number)
 
         # List of account information fields
-        accounts = ["Account Name", "Account Number",
-                    "Account Type", "Password"]
+        accounts = ["Account Name", "Account Number", "Account Type", "Password"]
 
         # List of account data entered by the user
-        accounts_data = [self.account_name.text(
-        ), account_number, self.accountype.currentText(), self.password_create.text()]
+        accounts_data = [
+            self.account_name.text(),
+            account_number,
+            self.accountype.currentText(),
+            self.password_create.text(),
+        ]
 
         # Create a dictionary with the filling data and corresponding user-entered data
-        self.output = {filling_data[i]: list_of_data[i]
-                       for i in range(len(list_of_data))}
+        self.output = {
+            filling_data[i]: list_of_data[i] for i in range(len(list_of_data))
+        }
 
         # Check if any of the required information fields are empty
         self.infolist = [i == "" for i in list_of_data]
@@ -78,24 +95,28 @@ class Bank(DesignClass.MasterGUI):
         # Display an error message if any required field is empty
         if any(self.infolist) or any(accountlist):
             try:
-                print(
-                    f"{filling_data[self.infolist.index(True)]} isn't filled")
+                print(f"{filling_data[self.infolist.index(True)]} isn't filled")
 
             except Exception:
                 print(f"{accounts[accountlist.index(True)]} isn't filled")
             return
         else:
             # Create dictionaries for user information and account information
-            if len(list_of_data[1])<13:
+            if len(list_of_data[1]) < 13:
                 QtWidgets.QMessageBox.information(
-                        self.MainWindow, "Account Signup", "CNIC must be 13 digit long, recheck and re-enter.")
+                    self.MainWindow,
+                    "Account Signup",
+                    "CNIC must be 13 digit long, recheck and re-enter.",
+                )
                 self.cnic.setText("")
                 return
-            
-            self.info = {filling_data[i]: list_of_data[i]
-                         for i in range(len(list_of_data))}
-            self.account = {accounts[i]: accounts_data[i]
-                            for i in range(len(accounts_data))}
+
+            self.info = {
+                filling_data[i]: list_of_data[i] for i in range(len(list_of_data))
+            }
+            self.account = {
+                accounts[i]: accounts_data[i] for i in range(len(accounts_data))
+            }
             if self.account["Account Type"] != "Loan Account":
                 self.account["Balance"] = 0
                 self.account["Card Number"] = self.generate_credit_card_number()
@@ -106,7 +127,9 @@ class Bank(DesignClass.MasterGUI):
                 else:
                     print("savings")
                     self.account["Interest Rate"] = 0.005
+                    self.account["Interest Add Date"] = (date.today()+timedelta(days=1)).strftime("%d/%m/%y")
             else:
+                self.output = [self.output]
                 self.MainWindow.close()
                 self.loan_application = QtWidgets.QDialog()
                 self.setupLoanApp(self.loan_application)
@@ -116,20 +139,32 @@ class Bank(DesignClass.MasterGUI):
 
             if self.account["Account Type"] == "Loan Account":
                 return
-            result = list(self.userAccountInfo.find(
-                {"CNIC": self.info["CNIC"]}))
+            result = list(self.userAccountInfo.find({"CNIC": self.info["CNIC"]}))
             if result != []:
                 QtWidgets.QMessageBox.information(
-                        self.MainWindow, "Account Signup", "CNIC found making another account.")
-                if self.account in self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0]["Accounts"]:
+                    self.MainWindow,
+                    "Account Signup",
+                    "CNIC found making another account.",
+                )
+                if (
+                    self.account
+                    in self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0][
+                        "Accounts"
+                    ]
+                ):
                     QtWidgets.QMessageBox.information(
-                        self.MainWindow, "Account Signup", "Account already exists. Kindly SignUp. Exit the application")
+                        self.MainWindow,
+                        "Account Signup",
+                        "Account already exists. Kindly SignUp. Exit the application",
+                    )
                     return
-                self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0]["Accounts"].append(self.account)
-            
+                self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0][
+                    "Accounts"
+                ].append(self.account)
+
                 self.userAccountInfo.updateDB()
             else:
-                print('here')
+                print("here")
                 self.info |= {"Accounts": [self.account]}
                 self.userAccountInfo.insert(self.info)
             self.output = [self.output]
@@ -140,30 +175,39 @@ class Bank(DesignClass.MasterGUI):
     def checkCredentials(self):
         """Check the login credentials entered by the user."""
         filling_data = ["CNIC", "Account Name", "Password"]
-        list_of_data = [self.cnic_line_edit.text(
-        ), self.account_edit_login.text(), self.password_login_edit.text()]
+        list_of_data = [
+            self.cnic_line_edit.text(),
+            self.account_edit_login.text(),
+            self.password_login_edit.text(),
+        ]
 
         # Check if any of the fields are empty
         self.infolist = [i == "" for i in list_of_data]
         if any(self.infolist):
             print(f"{filling_data[self.infolist.index(True)]} isn't filled")
         else:
-            if len(list_of_data[0])<13:
+            if len(list_of_data[0]) < 13:
                 QtWidgets.QMessageBox.information(
-                        self.MainWindow, "Account Login", "CNIC must be 13 digit long, recheck and re-enter.")
+                    self.MainWindow,
+                    "Account Login",
+                    "CNIC must be 13 digit long, recheck and re-enter.",
+                )
                 self.cnic_line_edit.setText("")
                 return
             # Create a dictionary with the filled data
-            self.info = {filling_data[i]: list_of_data[i]
-                         for i in range(len(list_of_data))}
+            self.info = {
+                filling_data[i]: list_of_data[i] for i in range(len(list_of_data))
+            }
 
             # Search for the account using CNIC
-            self.output = self.userAccountInfo.find(
-                {"CNIC": self.info["CNIC"]})
+            self.output = self.userAccountInfo.find({"CNIC": self.info["CNIC"]})
 
             if self.output == []:
                 QtWidgets.QMessageBox.warning(
-                        self.MainWindow, "Account Login", "No Account found with the provided CNIC.")
+                    self.MainWindow,
+                    "Account Login",
+                    "No Account found with the provided CNIC.",
+                )
             else:
                 accounts = self.output[0]["Accounts"]
                 for account in accounts:
@@ -171,13 +215,17 @@ class Bank(DesignClass.MasterGUI):
                         break
                 else:
                     QtWidgets.QMessageBox.warning(
-                        self.MainWindow, "Account Login", "Incorrect Account Name.")
+                        self.MainWindow, "Account Login", "Incorrect Account Name."
+                    )
                     return
 
                 # Check if the entered password matches the account's password
                 if account["Password"] != self.info["Password"]:
                     QtWidgets.QMessageBox.warning(
-                        self.MainWindow, "Account Login", "Incorrect Password for the account.")
+                        self.MainWindow,
+                        "Account Login",
+                        "Incorrect Password for the account.",
+                    )
                 elif account["Account Type"] == "Loan Account":
                     # Open the loan window if it's a loan account
                     self.account = account
@@ -191,33 +239,35 @@ class Bank(DesignClass.MasterGUI):
         """Open the home window after successful login."""
         super().openHomeWindow()
         self.reveal_bool = True
-        hide = '\N{BLACK CIRCLE}'
+        hide = "\N{BLACK CIRCLE}"
         # Set the name labels to display the user's full name
         self.name_top.setText(f'Welcome, {self.output[0]["Full Name"]}')
-        self.name_card.setText(f'{hide*len(self.output[0]["Full Name"])}')
-        self.name_2.setText(f'{hide*len(self.output[0]["Full Name"])}')
+        self.name_card.setText(f'{hide * len(self.output[0]["Full Name"])}')
+        self.name_2.setText(f'{hide * len(self.output[0]["Full Name"])}')
 
         # Set the expiry date labels to display the account's expiry date
-        self.expiry_date.setText(hide*len(self.account['Expiry Date'][0]))
-        self.expiry.setText(hide*len(self.account['Expiry Date'][0]))
-        self.month.setText(hide*len(self.account['Expiry Date'][1]))
-        self.year.setText(hide*len(self.account['Expiry Date'][2]))
+        self.expiry_date.setText(hide * len(self.account["Expiry Date"][0]))
+        self.expiry.setText(hide * len(self.account["Expiry Date"][0]))
+        self.month.setText(hide * len(self.account["Expiry Date"][1]))
+        self.year.setText(hide * len(self.account["Expiry Date"][2]))
 
         # Set the card number labels to display the account's card number
-        self.number_2.setText(hide*len(self.account["Card Number"]))
-        self.acc_number.setText(hide*len(self.account["Card Number"]))
-        self.number.setText(hide*len(self.account["Card Number"]))
+        self.number_2.setText(hide * len(self.account["Card Number"]))
+        self.acc_number.setText(hide * len(self.account["Card Number"]))
+        self.number.setText(hide * len(self.account["Card Number"]))
 
-        # Set the balance labels to display the account's balance
-        self.balance_amount.setText(f"${self.account['Balance']}")
-        self.money_label.setText(f"${self.account['Balance']}")
 
         # Check the account type and set the appropriate overdraft or interest rate labels
         if self.account["Account Type"] == "Checking Account":
             self.overdraft.setText(f"+${int(self.account['Overdraft'])}")
         else:
+            self.addInterest()
             self.overdraft.setText(
-                f"+{int(self.account['Interest Rate']*self.account['Balance'])}")
+                f"+{int(self.account['Interest Rate'] * self.account['Balance'])}" 
+            )
+        # Set the balance labels to display the account's balance
+        self.balance_amount.setText(f"${self.account['Balance']}")
+        self.money_label.setText(f"${self.account['Balance']}")
 
         # Populate the list of accounts for the transfer
         for i in self.userAccountInfo.data_records:
@@ -225,12 +275,14 @@ class Bank(DesignClass.MasterGUI):
                 account_name = account["Account Name"]
                 cnic = i["CNIC"]
                 self.listofaccounts.addItem(
-                    "{:<27}{:>27}".format(account_name[:27], cnic[:27]))
+                    "{:<27}{:>27}".format(account_name[:27], cnic[:27])
+                )
 
         # calculates the average income and the average expense and initiates the customer class
         self.averageCalculate()
         self.customerInit()
         self.setTransactions()
+
     def setupDB(self):
         """Sets up Database Instance with refrence to the local files"""
         from database import Hakoniwa
@@ -238,46 +290,16 @@ class Bank(DesignClass.MasterGUI):
         self.userAccountInfo = Hakoniwa("DB.json")
         print(self.userAccountInfo)
 
-    def accept(self):
-        """If user accepts the Loan"""
-        # Makes three variable for DB
-        self.account["Loan"] = int(self.loan_amount.text())
-        self.account["Added"] = int(int(self.loan_amount.text())*0.06)
-        self.account["Net Pay"] = int(
-            self.loan_amount.text()) + int(int(self.loan_amount.text())*0.06)
-        self.loan_application.close()
-        # checks if user has already made an account or not
-        if list(self.userAccountInfo.find({"CNIC": self.info["CNIC"]})) != []:
-            print("found")
-            self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[
-                0]["Accounts"].append(self.account)
-            self.userAccountInfo.updateDB()
-        else:
-            print('here')
-            self.info |= {"Accounts": [self.account]}
-            self.userAccountInfo.insert(self.info)
-        self.openLoanWindow()
-
-    def openLoanWindow(self):
-        """opens loan window and sets up the window"""
-        self.setupUi_loan(self.MainWindow)
-        self.MainWindow.show()
-        self.loan_taken.setText(f"${self.account['Loan']}")
-        self.interest.setText(f"${self.account['Loan']*0.06}")
-        self.total_repay.setText(
-            f"${self.account['Loan']+self.account['Loan']*0.06}")
-        self.name_loan.setText(f"{self.output['Full Name']}")
-
-    def reject(self):
-        """closes the window if user rejects."""
-        self.loan_application.close()
-        self.MainWindow.close()
-        self.__init__()
-
     def customerInit(self):
         """Initializes the customer class"""
-        self.current_customer = Customer(self.account, [
-                                         self.balance_amount, self.money_label],  self.overdraft, self.deposit_entry, self.withdraw_label, self.overdraft)
+        self.current_customer = Customer(
+            self.account,
+            [self.balance_amount, self.money_label],
+            self.overdraft,
+            self.deposit_entry,
+            self.withdraw_label,
+            self.overdraft,
+        )
         print(self.current_customer)
 
     def deposit_money(self):
@@ -289,13 +311,19 @@ class Bank(DesignClass.MasterGUI):
         self.setTransactions()
         # Info Box after Deposit
         QtWidgets.QMessageBox.information(
-            self.MainWindow, "Deposit", "The amount has been deposited successfully.\nPlease do not deposit again.")
+            self.MainWindow,
+            "Deposit",
+            "The amount has been deposited successfully.\nPlease do not deposit again.",
+        )
 
     def withdraw_money(self):
         """Withdraws the money entered in the field of withdraw entry"""
         if not self.validateWithdrawal():
-            QtWidgets.QMessageBox.information(self.MainWindow, "Withdraw for Savings",
-                                              "Bank Eternus follows the policy of fixed withdrawal.\nIt is requested you withdraw after a day.")
+            QtWidgets.QMessageBox.information(
+                self.MainWindow,
+                "Withdraw for Savings",
+                "Bank Eternus follows the policy of fixed withdrawal.\nIt is requested you withdraw after a day.",
+            )
             return
         self.current_customer.withdraw()
         print(self.account)
@@ -305,8 +333,8 @@ class Bank(DesignClass.MasterGUI):
         self.averageCalculate()
         self.setTransactions()
         QtWidgets.QMessageBox.information(
-            self.MainWindow, "Withdraw", "The amount has been withdrawn successfull.")
-
+            self.MainWindow, "Withdraw", "The amount has been withdrawn successfull."
+        )
 
     def saveToDB(self):
         """Saves the changes made to DB"""
@@ -316,9 +344,10 @@ class Bank(DesignClass.MasterGUI):
         """Transfers the funds from one to another"""
         # gets the current selected option
         transfer_to: str = self.listofaccounts.currentText()
-        found_account_name = transfer_to[:transfer_to.find(" ")]
+        found_account_name = transfer_to[: transfer_to.find(" ")]
         found_user = self.userAccountInfo.find(
-            {"CNIC": transfer_to[(transfer_to.rfind(" "))+1:]})
+            {"CNIC": transfer_to[(transfer_to.rfind(" ")) + 1 :]}
+        )
         index = self.userAccountInfo.data_records.index(found_user[0])
         accounts = self.userAccountInfo.data_records[index]["Accounts"]
         for account in accounts:
@@ -335,68 +364,97 @@ class Bank(DesignClass.MasterGUI):
             return
         if self.current_customer.current_account["Balance"] > transfer_ammount:
             # temporarly imports datetime module
-            self.userAccountInfo.data_records[index]["Accounts"][found_account]["Balance"] += transfer_ammount
-            self.userAccountInfo.data_records[index]["Accounts"][found_account]["Transactions"].append(["deposit", date.today().strftime("%d/%m/%Y"), transfer_ammount])
+            self.userAccountInfo.data_records[index]["Accounts"][found_account][
+                "Balance"
+            ] += transfer_ammount
+            self.userAccountInfo.data_records[index]["Accounts"][found_account][
+                "Transactions"
+            ].append(["deposit", date.today().strftime("%d/%m/%Y"), transfer_ammount])
             self.withdraw_label.setText(str(transfer_ammount))
             self.current_customer.withdraw()
             self.saveToDB()
 
     def averageCalculate(self):
         withdraw_list = []  # List to store withdrawal amounts
-        deposit_list = []   # List to store deposit amounts
-        
-        print(self.account)  # Printing the account details for debugging purposes
-        
+        deposit_list = []  # List to store deposit amounts
+
+        # Printing the account details for debugging purposes
+
         # Iterating through each transaction in the account's "Transactions" list
         for i in self.account["Transactions"]:
             if i[0] == "withdraw":
-                withdraw_list.append(int(i[(2)]))   # Adding withdrawal amount to the list
+                # Adding withdrawal amount to the list
+                withdraw_list.append(int(i[(2)]))
             else:
-                deposit_list.append(int(i[2]))      # Adding deposit amount to the list
-        
+                # Adding deposit amount to the list
+                deposit_list.append(int(i[2]))
+
         # Checking if there are no withdrawals or deposits in the account
         if not len(withdraw_list) or not len(deposit_list):
-            self.income.setText("$0")    # Setting average income label to $0
-            self.expense.setText("$0")   # Setting average expense label to $0
+            self.income.setText("$0")  # Setting average income label to $0
+            self.expense.setText("$0")  # Setting average expense label to $0
             return
-        
+
         # Calculating and setting the average income label
         self.income.setText(
-            f"Average Income: ${round(sum(deposit_list)/len(deposit_list))}")
-        
+            f"Average Income: ${round(sum(deposit_list) / len(deposit_list))}"
+        )
+
         # Calculating and setting the average expense label
         self.expense.setText(
-            f"Average Expense: ${round(sum(withdraw_list)/len(withdraw_list))}")
-
+            f"Average Expense: ${round(sum(withdraw_list) / len(withdraw_list))}"
+        )
 
     def validateWithdrawal(self):
         if self.account["Account Type"] == "Checking Account":
             return True
-        
+
         for transaction in self.account["Transactions"]:
             if transaction[0] == "withdraw":
                 break
         else:
             return True
-        
-        current_date = datetime.now().date()   # Getting the current date
-        target_date = datetime.strptime(transaction[1], "%d/%m/%Y").date()   # Parsing the date from transaction details
-        days_difference = (current_date - target_date).days   # Calculating the difference in days
-        
+
+        current_date = datetime.now().date()  # Getting the current date
+        # Parsing the date from transaction details
+        target_date = datetime.strptime(transaction[1], "%d/%m/%Y").date()
+        # Calculating the difference in days
+        days_difference = (current_date - target_date).days
+
         return days_difference >= 1
 
-
     def copy_details(self):
-        pyperclip.copy(f'{self.output[0]["Full Name"]}\n{self.account["Card Number"]}\n{self.account["Expiry Date"][0]}')
+        pyperclip.copy(
+            f'{self.output[0]["Full Name"]}\n{self.account["Card Number"]}\n{self.account["Expiry Date"][0]}'
+        )
 
+    def name_copy(self):
+        pyperclip.copy(self.output[0]["Full Name"])
+
+    def number_copy(self):
+        pyperclip.copy(self.account["Card Number"])
+
+    def month_copy(self):
+        pyperclip.copy(self.account["Expiry Date"][1])
+
+    def year_copy(self):
+        pyperclip.copy(self.account["Expiry Date"][2])
 
     def reveal_details(self):
         # Create a message box to prompt the user
         msg_box = QtWidgets.QMessageBox()
         msg_box.setWindowTitle("Confirmation")
-        msg_box.setText(("Are you sure you want to reveal the details?" if self.reveal_bool else "Are you sure you want to hide the details?"))
+        msg_box.setText(
+            (
+                "Are you sure you want to reveal the details?"
+                if self.reveal_bool
+                else "Are you sure you want to hide the details?"
+            )
+        )
         msg_box.setIcon(QtWidgets.QMessageBox.Question)
-        msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel)
+        msg_box.setStandardButtons(
+            QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel
+        )
         msg_box.setDefaultButton(QtWidgets.QMessageBox.Cancel)
 
         # Execute the message box and get the user's choice
@@ -410,10 +468,10 @@ class Bank(DesignClass.MasterGUI):
                 self.name_2.setText(self.output[0]["Full Name"])
 
                 # Set the expiry date labels to display the account's expiry date
-                self.expiry_date.setText(self.account['Expiry Date'][0])
-                self.expiry.setText(self.account['Expiry Date'][0])
-                self.month.setText(self.account['Expiry Date'][1])
-                self.year.setText(self.account['Expiry Date'][2])
+                self.expiry_date.setText(self.account["Expiry Date"][0])
+                self.expiry.setText(self.account["Expiry Date"][0])
+                self.month.setText(self.account["Expiry Date"][1])
+                self.year.setText(self.account["Expiry Date"][2])
 
                 # Set the card number labels to display the account's card number
                 self.number_2.setText(self.account["Card Number"])
@@ -421,36 +479,38 @@ class Bank(DesignClass.MasterGUI):
                 self.number.setText(self.account["Card Number"])
                 self.reveal_bool = False
             else:
-                hide = '\N{BLACK CIRCLE}'
+                hide = "\N{BLACK CIRCLE}"
                 # sets to the blurred data
                 self.name_card.setText(f'{hide * len(self.output[0]["Full Name"])}')
                 self.name_2.setText(f'{hide * len(self.output[0]["Full Name"])}')
 
                 # Set the expiry date labels to display the account's expiry date
-                self.expiry_date.setText(hide * len(self.account['Expiry Date'][0]))
-                self.expiry.setText(hide * len(self.account['Expiry Date'][0]))
-                self.month.setText(hide * len(self.account['Expiry Date'][1]))
-                self.year.setText(hide * len(self.account['Expiry Date'][2]))
+                self.expiry_date.setText(hide * len(self.account["Expiry Date"][0]))
+                self.expiry.setText(hide * len(self.account["Expiry Date"][0]))
+                self.month.setText(hide * len(self.account["Expiry Date"][1]))
+                self.year.setText(hide * len(self.account["Expiry Date"][2]))
 
                 # Set the card number labels to display the account's card number
                 self.number_2.setText(hide * len(self.account["Card Number"]))
                 self.acc_number.setText(hide * len(self.account["Card Number"]))
                 self.number.setText(hide * len(self.account["Card Number"]))
+
     def setTransactions(self):
         if not self.count:
             self.recent_transactions = QtWidgets.QLabel(self.transactions)
             self.recent_transactions.setMaximumSize(QtCore.QSize(16777215, 40))
             self.recent_transactions.setStyleSheet(
-                "color:green;font: 24pt \"Modern No. 20\";")
+                'color:green;font: 24pt "Modern No. 20";'
+            )
             self.recent_transactions.setObjectName("recent_transactions")
             self.recent_transactions.setText("Recent Transactions")
             self.verticalLayout_21.addWidget(self.recent_transactions)
             self.verticalLayout_21.addWidget(self.transaction_1)
             self.verticalLayout_21.addWidget(self.transaction_2)
             self.verticalLayout_21.addWidget(self.transaction_3)
-            self.count+=1
-        transactions = self.account['Transactions']
-        if len(transactions)>2:
+            self.count += 1
+        transactions = self.account["Transactions"]
+        if len(transactions) > 2:
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
             self.amount_1.setText(str(transactions[-1][2]))
@@ -460,7 +520,7 @@ class Bank(DesignClass.MasterGUI):
             self.withdraw_3.setText(transactions[-3][0])
             self.date_3.setText(transactions[-3][1])
             self.amount_3.setText(str(transactions[-3][2]))
-        elif len(transactions)==2:
+        elif len(transactions) == 2:
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
             self.amount_1.setText(str(transactions[-1][2]))
@@ -481,23 +541,107 @@ class Bank(DesignClass.MasterGUI):
             self.no_transactions = QtWidgets.QLabel(self.transactions)
             self.no_transactions.setObjectName("no_transactions")
             self.no_transactions.setStyleSheet(
-                "color:green;font: 24pt \"Modern No. 20\";")
+                'color:green;font: 24pt "Modern No. 20";'
+            )
             self.no_transactions.setAlignment(QtCore.Qt.AlignCenter)
             self.no_transactions.setText("Transactions Made will show here.")
             self.verticalLayout_21.addWidget(self.no_transactions)
+
+    # Loan Methods
+
+    def loan_customer_init(self):
+        self.loan_customer = Customer(
+            current_account=self.account,
+            balance_labels=[self.total_repay, self.month_amount],
+            withdraw_edit=self.repay_edit,
+        )
+
     def repay_money(self):
-        pass
-    def name_copy(self):
-        pyperclip.copy(self.output[0]["Full Name"])
-    def number_copy(self):
-        pyperclip.copy(self.account["Card Number"])
-    def month_copy(self):
-        pyperclip.copy(self.account["Expiry Date"][1])
-    def year_copy(self):
-        pyperclip.copy(self.account["Expiry Date"][2])
+        self.loan_customer.withdraw()
+        self.saveToDB()
+
+    def calculate_duedates(self, money):
+        return {
+            (
+                datetime.strptime(self.account["Date Made"], "%d%m%y")
+                + timedelta(days=30 * i + 1)
+            ).strftime("%d/%m/%y"): int(money / (12 * 10))
+            for i in range(12 * 10)
+        }
+
+    def calculate_current_due(self):
+        for date_ in self.account["Due Dates"]:
+            if datetime.strptime(date_, "%d/%m/%y").date() > date.today():
+                return date_
+
+    def passedDates(self):
+        passed_dates, due_dates = {}, self.account["Due Dates"]
+        for date_ in due_dates:
+            if date.today() < datetime.strptime(date_, "%d/%m/%y").date():
+                print(date_)
+                break
+            else:
+                passed_dates[date_] = due_dates[date_]
+        return passed_dates
+
+    def accept(self):
+        """If user accepts the Loan"""
+        self.account["Net Pay"] = int(self.loan_amount.text()) + int(
+            int(self.loan_amount.text()) * 0.06
+        )
+        self.account["Date Made"] = date.today().strftime("%d%m%y")
+        self.account["Due Dates"] = self.calculate_duedates(self.account["Net Pay"])
+        print(self.calculate_current_due())
+        self.loan_application.close()
+        # checks if user has already made an account or not
+        if list(self.userAccountInfo.find({"CNIC": self.info["CNIC"]})) != []:
+            print("found")
+            self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0][
+                "Accounts"
+            ].append(self.account)
+            self.userAccountInfo.updateDB()
+
+        else:
+            print("here")
+            self.info |= {"Accounts": [self.account]}
+            self.userAccountInfo.insert(self.info)
+        self.openLoanWindow()
+
+    def openLoanWindow(self):
+        """Opens loan window and sets up the window"""
+        # Sets up loan window
+        self.setupUi_loan(self.MainWindow)
+
+        self.MainWindow.show()
+        self.loan_customer_init()
+        passed = self.passedDates()
+        if not passed:
+            self.account["Due Dates"] = self.calculate_duedates(
+                self.account["Net Pay"] + sum(passed.values())
+            )
+
+        self.current_due = self.calculate_current_due()
+        self.month_amount.setText(f"${self.account['Due Dates'][self.current_due]}")
+        self.ammountToBePaid.setText(f"Due Date: {self.current_due}")
+        self.total_repay.setText(f'${self.account["Net Pay"]}')
+        self.name_loan.setText(f"{self.output[0]['Full Name']}")
+
+    def reject(self):
+        """Closes the window if user rejects."""
+        self.loan_application.close()
+        self.MainWindow.close()
+        self.__init__(self.MainWindow)
+    # Savings Account
+    def addInterest(self):
+        current_interest_date = datetime.strptime(self.account["Interest Add Date"],"%d/%m/%y").date()
+        current_date = date.today()
+        if current_date>=current_interest_date:
+            self.account["Balance"]+=self.account["Balance"]*self.account["Interest Rate"]
+            self.addInterest()
+        
+
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
 
 bank = Bank(MainWindow=MainWindow)
-
 sys.exit(app.exec_())

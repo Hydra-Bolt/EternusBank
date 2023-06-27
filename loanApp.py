@@ -27,7 +27,7 @@ class LoanApp(ABC):
         
         # Add a line edit for loan amount input to the vertical layout
         self.loan_amount = QtWidgets.QLineEdit(Loan)
-        self.loan_amount.setValidator(QtCore.QRegExp())
+        self.loan_amount.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]{5}")))
         self.loan_amount.setStyleSheet("font: 16pt \"Modern No. 20\";border-radius:5px;border:1px solid black;padding:6px")
         self.loan_amount.setObjectName("loan_amount")
         self.verticalLayout.addWidget(self.loan_amount)

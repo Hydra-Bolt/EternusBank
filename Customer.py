@@ -4,7 +4,7 @@ from datetime import date
 
 
 class Customer:
-    def __init__(self, current_account, balance_labels, overdraft_label, deposit_edit, withdraw_edit, overdraft) -> None:
+    def __init__(self, current_account=None, balance_labels=None, overdraft_label=None, deposit_edit=None, withdraw_edit=None, overdraft=None) -> None:
         self.current_account = current_account
         self.balance_labels = balance_labels
         self.overdraft_label = overdraft_label
@@ -34,19 +34,29 @@ class Customer:
         
 
     def withdraw(self):
+                
         current_date = date.today()
         formatted_date = current_date.strftime("%d/%m/%Y")
         try:
             amount = int(self.withdraw_edit.text())
+            print(amount)
             self.withdraw_edit.setText("")
         except:
             print("NAN")
+            return
+        
+        if self.current_account["Account Type"] == "Loan Account":
+            for label in self.balance_labels:
+                net = (int(label.text().strip("$"))-amount)
+                label.setText("$"+str(net if net>0 else 0))
+                self.current_account["Net Pay"] = self.current.withdraw(amount)
             return
         self.current_account["Balance"] = self.current.withdraw(amount)
         self.current_account["Transactions"].append(["withdraw", formatted_date, amount])
         self.balanceUpdate()
 
     def balanceUpdate(self):
+
         for label in self.balance_labels:
             label.setText(f"${self.current_account['Balance']}")
         print(self.current_account["Transactions"])
