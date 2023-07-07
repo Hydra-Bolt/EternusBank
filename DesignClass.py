@@ -18,7 +18,6 @@ importlib.reload(create_account)
 
 class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login, main.Home, loanApp.LoanApp, loan_window.Loan):
     def __init__(self, MainWindow):
-        super().__init__()  # Call the __init__() method of the superclass
         self.MainWindow = MainWindow
         self.setupUi_intro(self.MainWindow)
         self.MainWindow.show()
@@ -41,7 +40,7 @@ class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login,
 
     def openHomeWindow(self):
         self.MainWindow.close()
-        Home.setupHome(self)
+        Home.setupHome(self, self.MainWindow)
 
     def buttonclick(self, button:QtWidgets.QPushButton):
         print(button.objectName())
@@ -75,8 +74,6 @@ class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login,
             self.timer2.start(5000)
         except RuntimeError:
             pass
-
-    # Rest of the code...
 
 if __name__ == "__main__":
     import sys

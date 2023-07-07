@@ -1,5 +1,6 @@
 from Customer import Customer
 import DesignClass
+import contextlib
 import time
 import sys
 import random
@@ -7,8 +8,7 @@ from datetime import datetime, timedelta, date
 import importlib
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-# importlib.reload(DesignClass)
-from transaction import TransactionWidget
+importlib.reload(DesignClass)
 import pyperclip
 
 
@@ -19,10 +19,7 @@ class Bank(DesignClass.MasterGUI):
         """Initialize the Bank class."""
         DesignClass.MasterGUI.__init__(self, MainWindow)
         self.setupDB()
-        self.MainWindow = MainWindow
-        self.setupUi_intro(self.MainWindow)
         self.MainWindow.setWindowIcon(QtGui.QIcon("./icons/logo_title.png"))
-        self.MainWindow.show()
         self.count = 0
 
     def generate_credit_card_number(self):
@@ -127,7 +124,9 @@ class Bank(DesignClass.MasterGUI):
                 else:
                     print("savings")
                     self.account["Interest Rate"] = 0.005
-                    self.account["Interest Add Date"] = (date.today()+timedelta(days=1)).strftime("%d/%m/%y")
+                    self.account["Interest Add Date"] = (
+                        date.today() + timedelta(days=1)
+                    ).strftime("%d/%m/%y")
             else:
                 self.output = [self.output]
                 self.MainWindow.close()
@@ -256,18 +255,17 @@ class Bank(DesignClass.MasterGUI):
         self.acc_number.setText(hide * len(self.account["Card Number"]))
         self.number.setText(hide * len(self.account["Card Number"]))
 
-
         # Check the account type and set the appropriate overdraft or interest rate labels
         if self.account["Account Type"] == "Checking Account":
             self.overdraft.setText(f"+${int(self.account['Overdraft'])}")
         else:
             self.addInterest()
             self.overdraft.setText(
-                f"+{int(self.account['Interest Rate'] * self.account['Balance'])}" 
+                f"+{int(self.account['Interest Rate'] * self.account['Balance'])}"
             )
         # Set the balance labels to display the account's balance
-        self.balance_amount.setText(f"${self.account['Balance']}")
-        self.money_label.setText(f"${self.account['Balance']}")
+        self.balance_amount.setText(f"${round(self.account['Balance'], 2)}")
+        self.money_label.setText(f"${round(self.account['Balance'], 2)}")
 
         # Populate the list of accounts for the transfer
         for i in self.userAccountInfo.data_records:
@@ -325,7 +323,9 @@ class Bank(DesignClass.MasterGUI):
                 "Bank Eternus follows the policy of fixed withdrawal.\nIt is requested you withdraw after a day.",
             )
             return
+        init = self.account["Balance"]
         self.current_customer.withdraw()
+        fin = self.account["Balance"]
         print(self.account)
         print(self.current_customer.current_account["Balance"])
         # saves to DB
@@ -333,7 +333,7 @@ class Bank(DesignClass.MasterGUI):
         self.averageCalculate()
         self.setTransactions()
         QtWidgets.QMessageBox.information(
-            self.MainWindow, "Withdraw", "The amount has been withdrawn successfull."
+            self.MainWindow, "Withdraw", "The amount has been withdrawn successfully." if init!=fin else "The withdrawl was unsuccessful. Credit Limit Reached."
         )
 
     def saveToDB(self):
@@ -369,7 +369,7 @@ class Bank(DesignClass.MasterGUI):
             ] += transfer_ammount
             self.userAccountInfo.data_records[index]["Accounts"][found_account][
                 "Transactions"
-            ].append(["deposit", date.today().strftime("%d/%m/%Y"), transfer_ammount])
+            ].append(["Deposit", date.today().strftime("%d/%m/%Y"), transfer_ammount])
             self.withdraw_label.setText(str(transfer_ammount))
             self.current_customer.withdraw()
             self.saveToDB()
@@ -382,7 +382,7 @@ class Bank(DesignClass.MasterGUI):
 
         # Iterating through each transaction in the account's "Transactions" list
         for i in self.account["Transactions"]:
-            if i[0] == "withdraw":
+            if i[0] == "Withdraw":
                 # Adding withdrawal amount to the list
                 withdraw_list.append(int(i[(2)]))
             else:
@@ -410,7 +410,7 @@ class Bank(DesignClass.MasterGUI):
             return True
 
         for transaction in self.account["Transactions"]:
-            if transaction[0] == "withdraw":
+            if transaction[0] == "Withdraw":
                 break
         else:
             return True
@@ -496,7 +496,12 @@ class Bank(DesignClass.MasterGUI):
                 self.number.setText(hide * len(self.account["Card Number"]))
 
     def setTransactions(self):
+        print("called")
+        style_deposit = "*{color:green;}"
+        style_withdraw = "*{color:red;}"
+
         if not self.count:
+            # Create a QLabel for displaying "Recent Transactions"
             self.recent_transactions = QtWidgets.QLabel(self.transactions)
             self.recent_transactions.setMaximumSize(QtCore.QSize(16777215, 40))
             self.recent_transactions.setStyleSheet(
@@ -505,51 +510,86 @@ class Bank(DesignClass.MasterGUI):
             self.recent_transactions.setObjectName("recent_transactions")
             self.recent_transactions.setText("Recent Transactions")
             self.verticalLayout_21.addWidget(self.recent_transactions)
+
+            self.count += 1
+
+            # Add transaction QLabel widgets to the layout
             self.verticalLayout_21.addWidget(self.transaction_1)
             self.verticalLayout_21.addWidget(self.transaction_2)
             self.verticalLayout_21.addWidget(self.transaction_3)
-            self.count += 1
+
+        # Show transaction QLabel widgets
+        self.transaction_3.show()
+        self.transaction_2.show()
+        self.transaction_1.show()
+
         transactions = self.account["Transactions"]
+        self.no_transactions.hide()
+
+
+
         if len(transactions) > 2:
+            # Display transaction information for the latest three transactions
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
             self.amount_1.setText(str(transactions[-1][2]))
+
             self.withdraw_2.setText(transactions[-2][0])
             self.date_2.setText(transactions[-2][1])
             self.amount_2.setText(str(transactions[-2][2]))
+
             self.withdraw_3.setText(transactions[-3][0])
             self.date_3.setText(transactions[-3][1])
             self.amount_3.setText(str(transactions[-3][2]))
         elif len(transactions) == 2:
+            # Display transaction information for the latest two transactions
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
             self.amount_1.setText(str(transactions[-1][2]))
+
             self.withdraw_2.setText(transactions[-2][0])
             self.date_2.setText(transactions[-2][1])
             self.amount_2.setText(str(transactions[-2][2]))
-            self.transaction_2.hide()
+
+            # Hide the third transaction QLabel widget
+            self.transaction_3.hide()
         elif len(transactions) == 1:
+            # Display transaction information for the latest transaction
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
             self.amount_1.setText(str(transactions[0][2]))
+
+            # Hide the second and third transaction QLabel widgets
             self.transaction_3.hide()
             self.transaction_2.hide()
         else:
+            # Hide all transaction QLabel widgets and display "No transactions" message
             self.transaction_3.hide()
             self.transaction_2.hide()
             self.transaction_1.hide()
-            self.no_transactions = QtWidgets.QLabel(self.transactions)
-            self.no_transactions.setObjectName("no_transactions")
-            self.no_transactions.setStyleSheet(
-                'color:green;font: 24pt "Modern No. 20";'
-            )
-            self.no_transactions.setAlignment(QtCore.Qt.AlignCenter)
-            self.no_transactions.setText("Transactions Made will show here.")
+            self.no_transactions.show()
             self.verticalLayout_21.addWidget(self.no_transactions)
+            return
 
+        for i, j in enumerate(
+            [self.transaction_1, self.transaction_2, self.transaction_3]
+        ):
+            current = j.styleSheet()
+            with contextlib.suppress(IndexError):
+                if (
+                    transactions[-(i + 1)][0] == "Withdraw"
+                ):  # Check transaction type at index 0
+                    print(transactions[-(i + 1)][0])
+                    style_withdraw += current
+                    j.setStyleSheet(style_withdraw)
+                else:
+                    style_deposit += current
+                    j.setStyleSheet(style_deposit)
+                
     # Loan Methods
 
     def loan_customer_init(self):
+        # Initialize the loan customer with relevant information
         self.loan_customer = Customer(
             current_account=self.account,
             balance_labels=[self.total_repay, self.month_amount],
@@ -557,10 +597,12 @@ class Bank(DesignClass.MasterGUI):
         )
 
     def repay_money(self):
+        # Withdraw money from the loan customer's account and save the changes to the database
         self.loan_customer.withdraw()
         self.saveToDB()
 
     def calculate_duedates(self, money):
+        # Calculate the due dates for the loan repayments based on the loan amount
         return {
             (
                 datetime.strptime(self.account["Date Made"], "%d%m%y")
@@ -570,11 +612,13 @@ class Bank(DesignClass.MasterGUI):
         }
 
     def calculate_current_due(self):
+        # Calculate the current due date for the loan repayment
         for date_ in self.account["Due Dates"]:
             if datetime.strptime(date_, "%d/%m/%y").date() > date.today():
                 return date_
 
     def passedDates(self):
+        # Get the passed due dates for the loan repayments
         passed_dates, due_dates = {}, self.account["Due Dates"]
         for date_ in due_dates:
             if date.today() < datetime.strptime(date_, "%d/%m/%y").date():
@@ -586,6 +630,7 @@ class Bank(DesignClass.MasterGUI):
 
     def accept(self):
         """If user accepts the Loan"""
+        # Update account information with the accepted loan details
         self.account["Net Pay"] = int(self.loan_amount.text()) + int(
             int(self.loan_amount.text()) * 0.06
         )
@@ -593,9 +638,10 @@ class Bank(DesignClass.MasterGUI):
         self.account["Due Dates"] = self.calculate_duedates(self.account["Net Pay"])
         print(self.calculate_current_due())
         self.loan_application.close()
-        # checks if user has already made an account or not
+        # Check if the user has an existing account or not
         if list(self.userAccountInfo.find({"CNIC": self.info["CNIC"]})) != []:
             print("found")
+            # Add the account to the existing user's accounts
             self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0][
                 "Accounts"
             ].append(self.account)
@@ -603,13 +649,14 @@ class Bank(DesignClass.MasterGUI):
 
         else:
             print("here")
+            # Create a new user account with the loan account
             self.info |= {"Accounts": [self.account]}
             self.userAccountInfo.insert(self.info)
         self.openLoanWindow()
 
     def openLoanWindow(self):
         """Opens loan window and sets up the window"""
-        # Sets up loan window
+        # Set up the loan window
         self.setupUi_loan(self.MainWindow)
 
         self.MainWindow.show()
@@ -628,18 +675,50 @@ class Bank(DesignClass.MasterGUI):
 
     def reject(self):
         """Closes the window if user rejects."""
+        # Close the loan application window and the main window
         self.loan_application.close()
         self.MainWindow.close()
         self.__init__(self.MainWindow)
-    # Savings Account
-    def addInterest(self):
-        current_interest_date = datetime.strptime(self.account["Interest Add Date"],"%d/%m/%y").date()
-        current_date = date.today()
-        if current_date>=current_interest_date:
-            self.account["Balance"]+=self.account["Balance"]*self.account["Interest Rate"]
-            self.addInterest()
-        
 
+    # Savings Account
+
+    def addInterest(self):
+        # Add interest to the savings account balance
+        current_interest_date = datetime.strptime(
+            self.account["Interest Add Date"], "%d/%m/%y"
+        ).date()
+        current_date = date.today()
+        print(current_interest_date, current_date)
+        if current_date >= current_interest_date:
+            print("hehe")
+            self.account["Balance"] += (
+                self.account["Balance"] * self.account["Interest Rate"]
+            )
+            self.account["Interest Add Date"] = (current_interest_date + timedelta(days=1)).strftime("%d/%m/%y")
+            print(self.account["Balance"])
+            self.addInterest()
+        self.saveToDB()
+        
+    def logout(self):
+        confirm = QtWidgets.QMessageBox()
+        confirm.setWindowTitle("Confirmation")
+        confirm.setText(
+            (
+                "Are you sure you want to logout?"
+            )
+        )
+        confirm.setIcon(QtWidgets.QMessageBox.Question)
+        confirm.setStandardButtons(
+            QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel
+        )
+        confirm.setDefaultButton(QtWidgets.QMessageBox.Cancel)
+
+        # Execute the message box and get the user's choice
+        choice = confirm.exec()
+        if choice == QtWidgets.QMessageBox.Ok:
+            self.MainWindow.close()
+            self.__init__(self.MainWindow)
+            
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
 

@@ -90,7 +90,7 @@ class DashBoard:
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.frame_left_menu = QtWidgets.QFrame(self.Content)
         self.frame_left_menu.setMinimumSize(QtCore.QSize(72, 0))
-        self.frame_left_menu.setMaximumSize(QtCore.QSize(70, 16777215))
+        self.frame_left_menu.setMaximumSize(QtCore.QSize(150, 16777215))
         self.frame_left_menu.setStyleSheet("*{background-color: rgb(255, 255, 255);\n"
                                            "border:2px solid rgb(85, 170, 0);\n"
                                            "border-top:0;}\n"
@@ -177,6 +177,7 @@ class DashBoard:
                                       "    background-color: #f1fcf3;\n"
                                       "}")
         self.logout_button.setMinimumSize(QtCore.QSize(0, 40))
+        self.logout_button.clicked.connect(self.logout)
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("icons/logout.png"))
         self.logout_button.setIcon(icon4)
@@ -588,6 +589,17 @@ class DashBoard:
         self.transaction_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.transaction_3.setFrameShadow(QtWidgets.QFrame.Raised)
         self.transaction_3.setObjectName("transaction_3")
+        
+        self.transaction_1.setStyleSheet("#transaction_1 {border: 1px solid black;border-radius: 20px;padding-left:30px} *{font: 15pt \"Modern No. 20\";}")
+        self.transaction_2.setStyleSheet("#transaction_2 {border: 1px solid black;border-radius: 20px;padding-left:30px} *{font: 15pt \"Modern No. 20\";}")
+        self.transaction_3.setStyleSheet("#transaction_3 {border: 1px solid black;border-radius: 20px;padding-left:30px} *{font: 15pt \"Modern No. 20\";}")
+        self.no_transactions = QtWidgets.QLabel(self.transactions)
+        self.no_transactions.setObjectName("no_transactions")
+        self.no_transactions.setStyleSheet(
+            'color:green;font: 24pt "Modern No. 20";'
+        )
+        self.no_transactions.setAlignment(QtCore.Qt.AlignCenter)
+        self.no_transactions.setText("Transactions Made will show here.")
         self.horizontalLayout_20 = QtWidgets.QHBoxLayout(self.transaction_3)
         self.horizontalLayout_20.setObjectName("horizontalLayout_20")
         self.amount_3 = QtWidgets.QLabel(self.transaction_3)
@@ -815,12 +827,27 @@ class DashBoard:
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.setDashboard(MainWindow)
-        self.responsivePages.setCurrentIndex(2)
+        self.responsivePages.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def transfer_funds(self):
         pass
-
+    def number_copy(self):
+        pass
+    def month_copy(self):
+        pass
+    def year_copy(self):
+        pass
+    def name_copy(self):
+        pass
+    def copy_details(self):
+        pass
+    def reveal_details(self):
+        pass
+    def deposit_money(self):
+        pass
+    def withdraw_money(self):
+        pass
     def setDashboard(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -873,6 +900,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = DashBoard()
-    ui.setupUi(MainWindow)
+    ui.setupDashboard(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())

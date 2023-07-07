@@ -29,7 +29,7 @@ class Customer:
             print("NAN")
             return
         self.current_account["Balance"] = self.current.deposit(amount)
-        self.current_account["Transactions"].append(["deposit", formatted_date, amount])
+        self.current_account["Transactions"].append(["Deposit", formatted_date, amount])
         self.balanceUpdate()
         
 
@@ -52,7 +52,7 @@ class Customer:
                 self.current_account["Net Pay"] = self.current.withdraw(amount)
             return
         self.current_account["Balance"] = self.current.withdraw(amount)
-        self.current_account["Transactions"].append(["withdraw", formatted_date, amount])
+        self.current_account["Transactions"].append(["Withdraw", formatted_date, amount])
         self.balanceUpdate()
 
     def balanceUpdate(self):

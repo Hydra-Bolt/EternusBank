@@ -10,10 +10,10 @@ from ui_functions import *
 class CommonMeta(type(ABC), type(QtWidgets.QMainWindow), type(DashBoard)):
     pass
 
-class Home(ABC, QtWidgets.QMainWindow, DashBoard, metaclass=CommonMeta):
-    def setupHome(self):
-        QtWidgets.QMainWindow.__init__(self)
-        self.setupDashboard(self)
+class Home(ABC, DashBoard, metaclass=CommonMeta):
+    def setupHome(self, MainWindow):
+        self.MainWindow = MainWindow
+        self.setupDashboard(self.MainWindow)
         ## TOGGLE/BURGUER MENU
         ########################################################################
         self.Btn_Toggle.clicked.connect(lambda: UIFunctions.toggleMenu(self, 150, True))
@@ -34,7 +34,7 @@ class Home(ABC, QtWidgets.QMainWindow, DashBoard, metaclass=CommonMeta):
 
         ## SHOW ==> MAIN WINDOW
         ########################################################################
-        self.show()
+        self.MainWindow.show()
         ## ==> END ##
     def setupVars(self):
         self.setupDashboard(self)
