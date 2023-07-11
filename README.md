@@ -25,8 +25,8 @@ Bank Eternus is a comprehensive banking system designed to provide users with a 
 
 ## Installation
 
-1. Clone the repository: `git clone https://github.com/your-username/bank-eternus.git`
-2. Navigate to the project directory: `cd bank-eternus`
+1. Clone the repository: `git clone https://github.com/Hydra-Bolt/EternusBank.git`
+2. Navigate to the project directory: `cd EternusBank`
 3. Install the required dependencies: `pip install -r requirements.txt`
 4. Set up the database: Run the database setup script to create the necessary tables and initial data.
 5. Launch the application: Run the main application file to start the Bank Eternus system.
@@ -55,7 +55,6 @@ Bank Eternus is built with the help of various technologies and resources:
 
 - [Python](https://www.python.org/) - Programming language used for the backend.
 - [Qt](https://www.qt.io/) - GUI framework for developing the user interface.
-- [SQLite](https://www.sqlite.org/) - Database system for data storage.
-- [OpenAI](https://openai.com/) - Framework used for AI-driven features and assistant integration.
+- [Hakoniwa](https://github.com/Hydra-Bolt/Hakoniwa) - Database system for data storage.
 
 We extend our gratitude to the creators and maintainers of these technologies for their contributions.
