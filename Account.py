@@ -8,7 +8,7 @@ class Account:
         return self.balance
 
     def withdraw(self, amount):
-        if self.balance > amount:
+        if self.balance >= amount:
             self.balance -= amount
         return self.balance
     def balanceInquiry(self):

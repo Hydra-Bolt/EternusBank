@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from abc import ABC, abstractmethod
 
-class AdminLogin(ABC):
+class AdminLogin:
     def setup_ALoginUi(self, AdminLogin):
         AdminLogin.setObjectName("AdminLogin")
         AdminLogin.resize(1314, 644)
@@ -57,6 +56,7 @@ class AdminLogin(ABC):
         self.password_edit = QtWidgets.QLineEdit(self.details)
         self.password_edit.setStyleSheet("border:1px solid black;border-radius:10px;padding:5px 10px")
         self.password_edit.setObjectName("password_edit")
+        self.password_edit.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout_2.addWidget(self.password_edit)
         self.submit_button_frame = QtWidgets.QFrame(self.details)
         self.submit_button_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -90,7 +90,7 @@ class AdminLogin(ABC):
         self.password_edit.setPlaceholderText(_translate("AdminLogin", "..."))
         self.submit_button.setText(_translate("AdminLogin", "Submit"))
         
-    @abstractmethod
+
     def authenticateLogin(self):
         pass
 

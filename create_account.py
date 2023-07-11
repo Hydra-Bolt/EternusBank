@@ -158,9 +158,9 @@ class CreateAccount(ABC):
                                       "    border-radius:5px;\n"
                                       "}")
         self.submit_button_create.setObjectName("submit_button_create")
-        self.submit_button_create.clicked.connect(self.createAccount)
-        self.submit_button_create.clicked.connect(lambda:self.buttonclick(self.submit_button_create))
         self.verticalLayout_3.addWidget(self.submit_button_create)
+        self.submit_button_create.clicked.connect(self.createAccount)
+        # self.submit_button_create.clicked.connect(lambda:self.buttonclick(self.submit_button_create))
         self.verticalLayout.addWidget(
             self.submit_buttonframe, 0, QtCore.Qt.AlignHCenter)
         self.verticalLayout_2.addWidget(

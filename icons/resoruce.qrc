@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="frame">
-    <file>uppeGreenWave.jpg</file>
-  </qresource>
-  <qresource prefix="newPrefix"/>
-</RCC>

@@ -27,15 +27,25 @@ class LoanApp(ABC):
         
         # Add a line edit for loan amount input to the vertical layout
         self.loan_amount = QtWidgets.QLineEdit(Loan)
-        self.loan_amount.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]{5}")))
+        self.loan_amount.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]{1,6}(?:\.[0-9]{1,2})?")))
         self.loan_amount.setStyleSheet("font: 16pt \"Modern No. 20\";border-radius:5px;border:1px solid black;padding:6px")
         self.loan_amount.setObjectName("loan_amount")
         self.verticalLayout.addWidget(self.loan_amount)
         
-        # Adding validator for input field
+        # Add a scale widget for the amount of months to pay back the loan
+        self.months_slider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
+        self.months_slider.setObjectName("months_slider")
+        self.months_slider.setMinimum(1)
+        self.months_slider.setMaximum(60)  # Adjust the maximum as per your requirements
+        self.months_slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
+        self.months_slider.setTickInterval(1)
+        self.months_slider.valueChanged.connect(self.slider_change)
+        self.verticalLayout.addWidget(self.months_slider)
         
-        self.numbers_only = QtGui.QIntValidator()
-        self.numbers_only.setRange(0,9)
+        self.months_loan = QtWidgets.QLabel(Loan)
+        self.months_loan.setStyleSheet("font: 16pt \"Modern No. 20\";")
+        self.months_loan.setObjectName("ask_loan")
+        self.verticalLayout.addWidget(self.months_loan)
         
         # Add an OK/Cancel button box to the vertical layout
         self.okcancel = QtWidgets.QDialogButtonBox(Loan)
@@ -61,12 +71,19 @@ class LoanApp(ABC):
         self.welcome_loan.setText(_translate("Loan", "Welcome to Loan Account:"))
         self.ask_loan.setText(_translate("Loan", "What will be your starting Loan?"))
         self.loan_amount.setPlaceholderText(_translate("Loan", "Enter here"))
+
     @abstractmethod
     def accept(self):
         pass
+
     @abstractmethod
     def reject(self):
         pass
+    def slider_change(self):
+        months = self.months_slider.value()
+        year = months//12
+        months = months%12
+        self.months_loan.setText(f"{year} Year(s) and {months} Month(s)")
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

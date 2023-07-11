@@ -7,7 +7,6 @@ import importlib
 from main import Home
 import intro_bank
 import loan_window
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 import main
 import loanApp
@@ -68,26 +67,9 @@ class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login,
             self.timer2 = QtCore.QTimer()
 
             # Set up the timeout function to enable the button after the specified duration
-            self.timer2.timeout.connect(lambda: button.setEnabled(True))
+            self.timer2.timeout.connect(lambda: button.setEnabled(True)) if button else None
 
             # Start the timer
             self.timer2.start(5000)
-        except RuntimeError:
+        except:
             pass
-
-if __name__ == "__main__":
-    import sys
-    from PyQt5.QtWidgets import QApplication
-
-    # Create the application instance
-    app = QApplication(sys.argv)
-    window = QtWidgets.QMainWindow()
-    # Create an object of the MasterGUI class
-    master_gui = MasterGUI(window)
-
-    # Call methods to initialize and display the login or home window
-    # # Example: Show the login window
-    # Alternatively, you can call master_gui.openHomeWindow() to show the home window directly
-
-    # Start the application event loop
-    sys.exit(app.exec_())

@@ -154,7 +154,7 @@ class Bank(DesignClass.MasterGUI):
                     QtWidgets.QMessageBox.information(
                         self.MainWindow,
                         "Account Signup",
-                        "Account already exists. Kindly SignUp. Exit the application",
+                        "Account already exists. Kindly SignUp by exiting the application",
                     )
                     return
                 self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0][
@@ -333,7 +333,11 @@ class Bank(DesignClass.MasterGUI):
         self.averageCalculate()
         self.setTransactions()
         QtWidgets.QMessageBox.information(
-            self.MainWindow, "Withdraw", "The amount has been withdrawn successfully." if init!=fin else "The withdrawl was unsuccessful. Credit Limit Reached."
+            self.MainWindow,
+            "Withdraw",
+            "The amount has been withdrawn successfully."
+            if init != fin
+            else "The withdrawl was unsuccessful. Credit Limit Reached.",
         )
 
     def saveToDB(self):
@@ -526,8 +530,6 @@ class Bank(DesignClass.MasterGUI):
         transactions = self.account["Transactions"]
         self.no_transactions.hide()
 
-
-
         if len(transactions) > 2:
             # Display transaction information for the latest three transactions
             self.withdrawn_1.setText(transactions[-1][0])
@@ -585,7 +587,7 @@ class Bank(DesignClass.MasterGUI):
                 else:
                     style_deposit += current
                     j.setStyleSheet(style_deposit)
-                
+
     # Loan Methods
 
     def loan_customer_init(self):
@@ -597,18 +599,64 @@ class Bank(DesignClass.MasterGUI):
         )
 
     def repay_money(self):
-        # Withdraw money from the loan customer's account and save the changes to the database
-        self.loan_customer.withdraw()
-        self.saveToDB()
+        """Withdraws money from the loan customer's account and updates the loan details."""
+        amount = self.loan_customer.withdraw()
+        if amount is None:
+            return
+        current_due = self.calculate_current_due()
+
+        try:
+            if self.account["Due Dates"][list(self.account["Due Dates"].keys())[-1]] == 0:
+                # No more dues remaining, all payments made
+                QtWidgets.QMessageBox.information(
+                    self.MainWindow, "Loan Repayment", "No more dues remaining. Loan fully repaid. Deleting and Exiting the account. Goodbye."
+                )
+                self.MainWindow.close()
+                return
+
+            if amount <= self.account["Due Dates"][current_due]:
+                # Subtract the amount from the current due date
+                self.account["Due Dates"][current_due] -= amount
+            else:
+                # Calculate the remaining amount after paying the current due date
+                remaining_amount = amount - self.account["Due Dates"][current_due]
+
+                # Update the current due date to the next one
+                next_due_dates = list(self.account["Due Dates"].keys())
+                current_due_index = next_due_dates.index(current_due)
+                self.account["Due Dates"][current_due] = 0
+
+                # Pay the remaining amount for the next due dates
+                for i in range(current_due_index + 1, len(next_due_dates)):
+                    due_date = next_due_dates[i]
+                    if remaining_amount >= self.account["Due Dates"][due_date]:
+                        remaining_amount -= self.account["Due Dates"][due_date]
+                        self.account["Due Dates"][due_date] = 0
+                    else:
+                        self.account["Due Dates"][due_date] -= remaining_amount
+                        remaining_amount = 0
+                        break
+
+            self.saveToDB()
+            QtWidgets.QMessageBox.information(
+                self.MainWindow, "Loan Repayment", "Payment successful."
+            )
+        except KeyError:
+            # The current due date doesn't exist
+            QtWidgets.QMessageBox.warning(
+                self.MainWindow,
+                "Loan Repayment",
+                "There is no due date available for repayment.",
+            )
 
     def calculate_duedates(self, money):
         # Calculate the due dates for the loan repayments based on the loan amount
         return {
             (
-                datetime.strptime(self.account["Date Made"], "%d%m%y")
+                datetime.strptime(self.account["Date Made"], "%d/%m/%y")
                 + timedelta(days=30 * i + 1)
-            ).strftime("%d/%m/%y"): int(money / (12 * 10))
-            for i in range(12 * 10)
+            ).strftime("%d/%m/%y"): float(money / (self.months_slider.value()))
+            for i in range(self.months_slider.value())
         }
 
     def calculate_current_due(self):
@@ -623,7 +671,7 @@ class Bank(DesignClass.MasterGUI):
         for date_ in due_dates:
             if date.today() < datetime.strptime(date_, "%d/%m/%y").date():
                 print(date_)
-                break
+                return passed_dates
             else:
                 passed_dates[date_] = due_dates[date_]
         return passed_dates
@@ -632,11 +680,12 @@ class Bank(DesignClass.MasterGUI):
         """If user accepts the Loan"""
         # Update account information with the accepted loan details
         self.account["Net Pay"] = int(self.loan_amount.text()) + int(
-            int(self.loan_amount.text()) * 0.06
+            int(self.loan_amount.text()) * 0.26
         )
-        self.account["Date Made"] = date.today().strftime("%d%m%y")
+        self.account["Date Made"] = date.today().strftime("%d/%m/%y")
         self.account["Due Dates"] = self.calculate_duedates(self.account["Net Pay"])
         print(self.calculate_current_due())
+        print("RAN")
         self.loan_application.close()
         # Check if the user has an existing account or not
         if list(self.userAccountInfo.find({"CNIC": self.info["CNIC"]})) != []:
@@ -662,7 +711,7 @@ class Bank(DesignClass.MasterGUI):
         self.MainWindow.show()
         self.loan_customer_init()
         passed = self.passedDates()
-        if not passed:
+        if passed != {}:
             self.account["Due Dates"] = self.calculate_duedates(
                 self.account["Net Pay"] + sum(passed.values())
             )
@@ -694,19 +743,17 @@ class Bank(DesignClass.MasterGUI):
             self.account["Balance"] += (
                 self.account["Balance"] * self.account["Interest Rate"]
             )
-            self.account["Interest Add Date"] = (current_interest_date + timedelta(days=1)).strftime("%d/%m/%y")
+            self.account["Interest Add Date"] = (
+                current_interest_date + timedelta(days=1)
+            ).strftime("%d/%m/%y")
             print(self.account["Balance"])
             self.addInterest()
         self.saveToDB()
-        
+
     def logout(self):
         confirm = QtWidgets.QMessageBox()
         confirm.setWindowTitle("Confirmation")
-        confirm.setText(
-            (
-                "Are you sure you want to logout?"
-            )
-        )
+        confirm.setText(("Are you sure you want to logout?"))
         confirm.setIcon(QtWidgets.QMessageBox.Question)
         confirm.setStandardButtons(
             QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel
@@ -718,7 +765,8 @@ class Bank(DesignClass.MasterGUI):
         if choice == QtWidgets.QMessageBox.Ok:
             self.MainWindow.close()
             self.__init__(self.MainWindow)
-            
+
+
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
 

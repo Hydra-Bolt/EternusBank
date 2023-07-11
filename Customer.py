@@ -38,19 +38,20 @@ class Customer:
         current_date = date.today()
         formatted_date = current_date.strftime("%d/%m/%Y")
         try:
-            amount = int(self.withdraw_edit.text())
+            amount = float(self.withdraw_edit.text())
             print(amount)
             self.withdraw_edit.setText("")
         except:
             print("NAN")
             return
-        
+
         if self.current_account["Account Type"] == "Loan Account":
             for label in self.balance_labels:
-                net = (int(label.text().strip("$"))-amount)
-                label.setText("$"+str(net if net>0 else 0))
-                self.current_account["Net Pay"] = self.current.withdraw(amount)
-            return
+                net = (float(label.text().strip("$"))-amount)
+                label.setText(f"${max(net, 0)}")
+            self.current_account["Net Pay"] = self.current.withdraw(amount)
+
+            return amount
         self.current_account["Balance"] = self.current.withdraw(amount)
         self.current_account["Transactions"].append(["Withdraw", formatted_date, amount])
         self.balanceUpdate()

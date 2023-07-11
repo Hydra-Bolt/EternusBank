@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from abc import ABC, abstractmethod
 
-class AdminWindow(ABC):
+class AdminWindow:
     def setup_AWindowUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1098, 644)
@@ -59,7 +58,7 @@ class AdminWindow(ABC):
         self.delete_records.setObjectName("delete_records")
         self.delete_records.clicked.connect(self.deleteRecords)
         self.generate_report = QtWidgets.QPushButton(self.button_frame)
-        self.generate_report.setStyleSheet("font: 20pt \"Modern No. 20\";color:blue;padding:3px 20px;border:2px solid darkblue;border-radius:5px;")
+        self.generate_report.setStyleSheet("font: 20pt \"Modern No. 20\";color:blue;padding:3px 20px;border:2px solid darkblue;border-radius:5px;")     
         self.generate_report.clicked.connect(self.generateReport)
         self.horizontalLayout_2.addWidget(self.generate_report)
         self.horizontalLayout_2.addWidget(self.delete_records)
@@ -74,16 +73,16 @@ class AdminWindow(ABC):
         MainWindow.setCentralWidget(self.centralwidget)
         
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-    @abstractmethod
+        
     def deleteRecords(self):
         pass
-    @abstractmethod
+    
     def updateRecords(self):
         pass
-    @abstractmethod
+    
     def generateReport(self):
         pass
-    @abstractmethod
+    
     def searchRecord(self):
         pass
 if __name__ == "__main__":

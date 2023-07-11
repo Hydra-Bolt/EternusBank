@@ -53,7 +53,7 @@ class DashBoard:
                                       "}")
         self.Btn_Toggle.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icons/7216128.png"),
+        icon.addPixmap(QtGui.QPixmap("icons/burgur.png"),
                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Btn_Toggle.setIcon(icon)
         self.Btn_Toggle.setObjectName("Btn_Toggle")
@@ -125,7 +125,7 @@ class DashBoard:
         self.btn_page_1.setText("")
         # self.btn_page_1.setLayoutDirection(QtCore.Qt.LeftToRight)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("icons/2427222.png"),
+        icon1.addPixmap(QtGui.QPixmap("icons/home.png"),
                         QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_page_1.setIcon(icon1)
         self.btn_page_1.setObjectName("btn_page_1")
@@ -142,7 +142,7 @@ class DashBoard:
                                       "}")
         self.btn_page_2.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("icons/62780.png"),
+        icon2.addPixmap(QtGui.QPixmap("icons/card.png"),
                         QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_page_2.setIcon(icon2)
         self.btn_page_2.setObjectName("btn_page_2")
@@ -159,7 +159,7 @@ class DashBoard:
                                       "}")
         self.btn_page_3.setText("")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/1751700.png"),
+        icon3.addPixmap(QtGui.QPixmap("icons/transaction.png"),
                         QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_page_3.setIcon(icon3)
         self.btn_page_3.setObjectName("btn_page_3")
@@ -711,7 +711,7 @@ class DashBoard:
         self.verticalLayout_18.addWidget(
             self.deposit_entry, 0, QtCore.Qt.AlignHCenter)
         self.deposit_entry.setValidator(QtGui.QRegExpValidator(
-            QtCore.QRegExp("[0-9]+"), self.deposit_entry))
+            QtCore.QRegExp("[0-9]{6}(?:\.[0-9]{10})?"), self.deposit_entry))
         self.deposit = QtWidgets.QPushButton(self.deposit_frame)
         self.deposit.setStyleSheet("border:2px solid black;\n"
                                    "border-radius:4px;\n"
@@ -741,7 +741,7 @@ class DashBoard:
                                           "padding:12px;")
         self.withdraw_label.setObjectName("withdraw_label")
         self.withdraw_label.setValidator(QtGui.QRegExpValidator(
-            QtCore.QRegExp("[0-9]+"), self.withdraw_label))
+            QtCore.QRegExp("[0-9]{6}(?:\.[0-9]{10})?"), self.withdraw_label))
         self.verticalLayout_17.addWidget(
             self.withdraw_label, 0, QtCore.Qt.AlignHCenter)
         self.withdraw = QtWidgets.QPushButton(self.withdraw_frame)
@@ -786,7 +786,7 @@ class DashBoard:
                                            "font: 28pt \"Modern No. 20\";\n"
                                            "padding:12px;")
         self.transfer_amount.setValidator(QtGui.QRegExpValidator(
-            QtCore.QRegExp("[0-9]+"), self.transfer_amount))
+            QtCore.QRegExp("[0-9]{6}(?:\.[0-9]{10})?"), self.transfer_amount))
         self.transfer_amount.setText("")
         self.transfer_amount.setObjectName("transfer_amount")
         self.verticalLayout_20.addWidget(

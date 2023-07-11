@@ -1,5 +1,3 @@
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -12,8 +10,7 @@ class Loan:
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.mainframe_loan = QtWidgets.QFrame(self.centralwidget)
-        self.mainframe_loan.setStyleSheet(
-            "background-color: rgb(255, 255, 255);")
+        self.mainframe_loan.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.mainframe_loan.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.mainframe_loan.setFrameShadow(QtWidgets.QFrame.Raised)
         self.mainframe_loan.setObjectName("mainframe_loan")
@@ -28,21 +25,21 @@ class Loan:
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.topbar_loan)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.loan_account = QtWidgets.QLabel(self.topbar_loan)
-        self.loan_account.setStyleSheet(
-            "font: 18pt \"Modern No. 20\";color:green;")
+        self.loan_account.setStyleSheet('font: 18pt "Modern No. 20";color:green;')
         self.loan_account.setObjectName("loan_account")
         self.horizontalLayout_3.addWidget(self.loan_account)
         self.name_loan = QtWidgets.QLabel(self.topbar_loan)
-        self.name_loan.setStyleSheet(
-            "font: 18pt \"Modern No. 20\";color:green;")
+        self.name_loan.setStyleSheet('font: 18pt "Modern No. 20";color:green;')
         self.name_loan.setAlignment(
-            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
+            QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter
+        )
         self.name_loan.setObjectName("name_loan")
         self.horizontalLayout_3.addWidget(self.name_loan)
         self.verticalLayout.addWidget(self.topbar_loan)
         self.principal_amount = QtWidgets.QFrame(self.mainframe_loan)
         self.principal_amount.setStyleSheet(
-            "#principal_amount{border-bottom:2px dotted gray;}")
+            "#principal_amount{border-bottom:2px dotted gray;}"
+        )
         self.principal_amount.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.principal_amount.setFrameShadow(QtWidgets.QFrame.Raised)
         self.principal_amount.setObjectName("principal_amount")
@@ -55,25 +52,23 @@ class Loan:
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.loan_frame)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.principal_label = QtWidgets.QLabel(self.loan_frame)
-        self.principal_label.setStyleSheet("font: 30pt \"Modern No. 20\";")
+        self.principal_label.setStyleSheet('font: 30pt "Modern No. 20";')
         self.principal_label.setObjectName("principal_label")
         self.horizontalLayout_2.addWidget(self.principal_label)
         self.horizontalLayout.addWidget(self.loan_frame)
         self.total_repay = QtWidgets.QLabel(self.principal_amount)
-        self.total_repay.setStyleSheet(
-            "font: 28pt \"Modern No. 20\";color:green;")
+        self.total_repay.setStyleSheet('font: 28pt "Modern No. 20";color:green;')
         self.total_repay.setAlignment(QtCore.Qt.AlignCenter)
         self.total_repay.setObjectName("total_repay")
         self.horizontalLayout.addWidget(self.total_repay)
         self.verticalLayout.addWidget(self.principal_amount)
         self.ammountToBePaid = QtWidgets.QLabel(self.mainframe_loan)
-        self.ammountToBePaid.setStyleSheet("font: 28pt \"Modern No. 20\";color:red;")
+        self.ammountToBePaid.setStyleSheet('font: 28pt "Modern No. 20";color:red;')
         self.ammountToBePaid.setAlignment(QtCore.Qt.AlignCenter)
         self.ammountToBePaid.setObjectName("ammountToBePaid")
         self.verticalLayout.addWidget(self.ammountToBePaid)
         self.month_amount = QtWidgets.QLabel(self.mainframe_loan)
-        self.month_amount.setStyleSheet(
-            "font: 28pt \"Modern No. 20\";color:green;")
+        self.month_amount.setStyleSheet('font: 28pt "Modern No. 20";color:green;')
         self.month_amount.setAlignment(QtCore.Qt.AlignCenter)
         self.month_amount.setObjectName("month_amount")
         self.verticalLayout.addWidget(self.month_amount)
@@ -84,7 +79,7 @@ class Loan:
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.repay_frame)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.repay = QtWidgets.QLabel(self.repay_frame)
-        self.repay.setStyleSheet("font: 30pt \"Modern No. 20\";color:green;")
+        self.repay.setStyleSheet('font: 30pt "Modern No. 20";color:green;')
         self.repay.setObjectName("repay")
         self.verticalLayout_3.addWidget(self.repay)
         self.repay_edit_frame = QtWidgets.QFrame(self.repay_frame)
@@ -95,19 +90,21 @@ class Loan:
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.repay_edit = QtWidgets.QLineEdit(self.repay_edit_frame)
         self.repay_edit.setStyleSheet(
-            "border:1.5px solid black;border-radius:5px;font: 26pt \"Modern No. 20\";padding:30px 12px;color:gray;")
+            'border:1.5px solid black;border-radius:5px;font: 26pt "Modern No. 20";padding:30px 12px;color:gray;'
+        )
         self.repay_edit.setObjectName("repay_edit")
+        self.repay_edit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]{6}(?:\.[0-9]{2})?")))
         self.verticalLayout_4.addWidget(self.repay_edit)
         self.repay_submit = QtWidgets.QPushButton(self.repay_edit_frame)
         self.repay_submit.setStyleSheet(
-            "border:2px solid black;border-radius:6px;font: 18pt \"Modern No. 20\";background-color:#28b44c;padding:6px 15px")
+            'border:2px solid black;border-radius:6px;font: 18pt "Modern No. 20";background-color:#28b44c;padding:6px 15px'
+        )
         self.repay_submit.setObjectName("repay_submit")
-        self.repay_submit.clicked.connect(self.repay_money)
-        self.repay_submit.clicked.connect(lambda:self.buttonclick(self.repay_submit))
-        self.verticalLayout_4.addWidget(
-            self.repay_submit, 0, QtCore.Qt.AlignHCenter)
+        self.verticalLayout_4.addWidget(self.repay_submit, 0, QtCore.Qt.AlignHCenter)
         self.verticalLayout_3.addWidget(self.repay_edit_frame)
         self.verticalLayout.addWidget(self.repay_frame)
+        self.repay_submit.clicked.connect(self.repay_money)
+        self.repay_submit.clicked.connect(lambda: self.buttonclick(self.repay_submit))
         self.verticalLayout_5.addWidget(self.mainframe_loan)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -119,21 +116,11 @@ class Loan:
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.loan_account.setText(_translate("MainWindow", "Loan Account"))
         self.name_loan.setText(_translate("MainWindow", "Welcome, Name here"))
-        self.principal_label.setText(
-            _translate("MainWindow", "Principal Amount:"))
+        self.principal_label.setText(_translate("MainWindow", "Principal Amount:"))
         self.total_repay.setText(_translate("MainWindow", "= total amount"))
-        self.ammountToBePaid.setText(_translate(
-            "MainWindow", "Amount to be paid this month"))
+        self.ammountToBePaid.setText(
+            _translate("MainWindow", "Amount to be paid this month")
+        )
         self.month_amount.setText(_translate("MainWindow", "$3000"))
         self.repay.setText(_translate("MainWindow", "Repay your loan:"))
         self.repay_submit.setText(_translate("MainWindow", "Repay"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
