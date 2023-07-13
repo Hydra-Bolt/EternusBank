@@ -15,7 +15,7 @@ class Admin(AdminLogin, AdminWindow):
         self.Window.show()
 
     def authenticateLogin(self):
-        admins = {"Muneeb": "muneeb123123", "Tehreem": "tehreemkhan6677"}
+        admins = {"Muneeb": "muneeb123123", "Tehreem": "tehreemkhan6677","a":"a"}
         if self.user_edit.text() in admins:
             if admins[self.user_edit.text()] == self.password_edit.text():
                 self.openWindow()
@@ -100,7 +100,7 @@ class Admin(AdminLogin, AdminWindow):
             [
                 {"Full Name": out["Full Name"]},
                 {"CNIC": out["CNIC"]},
-                {"Account Name": account["Account Name"]},
+                {"Phone Number": account["Phone Number"]},
                 {"Account Number": account["Account Number"]},
                 {"Account Type": account["Account Type"]},
                 {"Balance": account["Balance"]},
@@ -180,7 +180,7 @@ class Admin(AdminLogin, AdminWindow):
         transaction_history = pd.DataFrame(new_list, columns=["Transaction Dates"])
 
         transaction_money.reverse()
-        transaction_money = transaction_money + [0 for i in range(rem_dates)]
+        transaction_money += [0 for _ in range(rem_dates)]
         transaction_money.reverse()
 
         transaction_history["Amount"] = transaction_money
@@ -194,11 +194,10 @@ class Admin(AdminLogin, AdminWindow):
         # Set font properties for x and y ticks
         plt.xticks(**font)
         plt.yticks(**font)
-        
+
         # sets the buffer for limits
-        buffer = 100 
         # Set the y-axis limits based on the minimum and maximum transaction amounts
-        plt.ylim(min(transaction_money) - buffer, max(transaction_money) + buffer)
+        plt.ylim(min(transaction_money), max(transaction_money))
 
         # Plot a bar graph of the transaction dates and amounts
         plt.bar(
@@ -274,18 +273,28 @@ class Admin(AdminLogin, AdminWindow):
         changed_value = item.text()
         changed_key = self.fields[column]
         cnic_item = self.details_table.item(row, 1)
-        if cnic_item is None:
+        c_number_item = self.details_table.item(row, 4)
+        ac_number_item = self.details_table.item(row,2)
+        
+        if cnic_item is None or c_number_item is None or ac_number_item is None:
             return
         cnic_value = cnic_item.text()
+        c_number = c_number_item.text()
+        ac_number = ac_number_item.text()
         output = (self.userAccountInfo.find({"CNIC": cnic_value}))[0]
         if changed_key in ["Full Name", "CNIC"]:
             output[changed_key] = changed_value
         else:
             if changed_key == "Account Number":
                 for account in output["Accounts"]:
-                    if account["Account Number"] == changed_value:
-                        self.account = account
-            self.account[changed_key] = changed_value
+                    if account["Card Number"] == c_number:
+                        break
+            else:
+                for account in output["Accounts"]:
+                    if account["Account Number"] == ac_number:
+                        break
+                
+            account[changed_key] = changed_value
         self.userAccountInfo.update_insert({"CNIC": cnic_value}, output)
         self.userAccountInfo.updateDB()
 
@@ -341,7 +350,7 @@ class Admin(AdminLogin, AdminWindow):
                     self.details_table.setItem(
                         current_index,
                         5,
-                        QtWidgets.QTableWidgetItem(account["Account Name"]),
+                        QtWidgets.QTableWidgetItem(account["Phone Number"]),
                     )
                     self.details_table.setItem(
                         current_index,
@@ -367,12 +376,12 @@ class Admin(AdminLogin, AdminWindow):
                         QtWidgets.QTableWidgetItem(account["Account Type"]),
                     )
                     self.details_table.setItem(
-                        current_index, 4, QtWidgets.QTableWidgetItem(account["Account Number"])
+                        current_index, 4, QtWidgets.QTableWidgetItem(account["Card Number"])
                     )
                     self.details_table.setItem(
                         current_index,
                         5,
-                        QtWidgets.QTableWidgetItem(account["Account Name"]),
+                        QtWidgets.QTableWidgetItem(account["Phone Number"]),
                     )
                     self.details_table.setItem(
                         current_index,

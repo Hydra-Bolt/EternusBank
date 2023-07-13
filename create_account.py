@@ -1,7 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from abc import ABC, abstractmethod
 
-class CreateAccount(ABC):
+class CreateAccount:
     def setupUi_create(self, CreateAccount):
         CreateAccount.setObjectName("CreateAccount")
         CreateAccount.resize(1200, 600)
@@ -58,25 +57,26 @@ class CreateAccount(ABC):
         self.fullname.setObjectName("fullname")
         self.fullname.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[A-Za-z ]+"), self.fullname))
         self.verticalLayout.addWidget(self.fullname)
-        self.account_name_label = QtWidgets.QLabel(self.label_frames)
-        self.account_name_label.setMaximumSize(QtCore.QSize(16777215, 20))
-        self.account_name_label.setStyleSheet("* {\n"
+        self.phone_number_label = QtWidgets.QLabel(self.label_frames)
+        self.phone_number_label.setMaximumSize(QtCore.QSize(16777215, 20))
+        self.phone_number_label.setStyleSheet("* {\n"
                                               "    font: 12pt \"Modern No. 20\";\n"
                                               "    color:green;\n"
                                               "    padding:0px 5px;\n"
                                               "}")
-        self.account_name_label.setObjectName("account_name_label")
-        self.verticalLayout.addWidget(self.account_name_label)
-        self.account_name = QtWidgets.QLineEdit(self.label_frames)
-        self.account_name.setStyleSheet("* {\n"
+        self.phone_number_label.setObjectName("phone_number_label")
+        self.verticalLayout.addWidget(self.phone_number_label)
+        self.phone_number = QtWidgets.QLineEdit(self.label_frames)
+        self.phone_number.setStyleSheet("* {\n"
                                         "    font: 12pt \"Modern No. 20\";\n"
                                         "    color:green;\n"
                                         "    padding:3px 10px;\n"
                                         "    border:1px solid darkgreen;\n"
                                         "    border-radius:5px;\n"
                                         "}")
-        self.account_name.setObjectName("account_name")
-        self.verticalLayout.addWidget(self.account_name)
+        self.phone_number.setObjectName("phone_number")
+        self.phone_number.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("(\+92|0)?3[0-9]{2}-?[0-9]{7}"), self.phone_number))
+        self.verticalLayout.addWidget(self.phone_number)
         self.cnic_label = QtWidgets.QLabel(self.label_frames)
         self.cnic_label.setMaximumSize(QtCore.QSize(16777215, 20))
         self.cnic_label.setStyleSheet("* {\n"
@@ -179,10 +179,10 @@ class CreateAccount(ABC):
         self.full_name_label.setText(_translate("CreateAccount", "Full Name:"))
         self.fullname.setPlaceholderText(
             _translate("CreateAccount", "John Doe"))
-        self.account_name_label.setText(_translate(
-            "CreateAccount", "Account Name (For Transactions):"))
-        self.account_name.setPlaceholderText(
-            _translate("CreateAccount", "Super account"))
+        self.phone_number_label.setText(_translate(
+            "CreateAccount", "Phone Number"))
+        self.phone_number.setPlaceholderText(
+            _translate("CreateAccount", "+92XXXXXXXXXX"))
         self.cnic_label.setText(_translate("CreateAccount", "CNIC:"))
         self.cnic.setPlaceholderText(_translate(
             "CreateAccount", "XXXXX-XXXXXXX-X"))
@@ -199,7 +199,8 @@ class CreateAccount(ABC):
         self.accountype.setItemText(2, _translate(
             "CreateAccount", "Checking Account"))
         self.submit_button_create.setText(_translate("CreateAccount", "Submit"))
-    @abstractmethod
+
+
     def createAccount(self):
         pass
 

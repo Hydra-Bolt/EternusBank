@@ -1,10 +1,7 @@
 
-
-
-from abc import ABC, abstractmethod
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class IntroPage(ABC):
+class IntroPage:
     
     def setupUi_intro(self, MainWindow: QtWidgets.QMainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -160,10 +157,9 @@ class IntroPage(ABC):
                                       "first step towards everlasting financial stability."))
         self.create_button.setText(_translate("MainWindow", "Create Account"))
         self.login_button.setText(_translate("MainWindow", "Login"))
-    @abstractmethod
+
     def createUser(self):
         pass
-    @abstractmethod
     def loginUser(self):
         pass
 if __name__ == "__main__":

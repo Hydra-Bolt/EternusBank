@@ -92,7 +92,7 @@ class Admin:
                 [
                     {"Full Name": out["Full Name"]},
                     {"CNIC": out["CNIC"]},
-                    {"Account Name": account["Account Name"]},
+                    {"Phone Number": account["Phone Number"]},
                     {"Account Number": account["Account Number"]},
                     {"Account Type": account["Account Type"]},
                     {"Balance": account["Balance"]},
@@ -105,7 +105,7 @@ class Admin:
                 [
                     {"Full Name": out["Full Name"]},
                     {"CNIC": out["CNIC"]},
-                    {"Account Name": account["Account Name"]},
+                    {"Phone Number": account["Phone Number"]},
                     {"Account Number": account["Account Number"]},
                     {"Account Type": account["Account Type"]},
                     {"Balance": account["Balance"]},
@@ -268,9 +268,11 @@ class Admin:
             output[changed_key] = changed_value
         else:
             if changed_key == "Account Number":
+                
                 for account in output["Accounts"]:
                     if account["Account Number"] == changed_value:
                         self.account = account
+            
             self.account[changed_key] = changed_value
         self.userAccountInfo.update_insert({"CNIC": cnic_value}, output)
         self.userAccountInfo.updateDB()
@@ -334,7 +336,7 @@ class Admin:
                     self.admin_window.details_table.setItem(
                         current_index,
                         5,
-                        QtWidgets.QTableWidgetItem(account["Account Name"]),
+                        QtWidgets.QTableWidgetItem(account["Phone Number"]),
                     )
                     self.admin_window.details_table.setItem(
                         current_index,
@@ -366,7 +368,7 @@ class Admin:
                     self.admin_window.details_table.setItem(
                         current_index,
                         5,
-                        QtWidgets.QTableWidgetItem(account["Account Name"]),
+                        QtWidgets.QTableWidgetItem(account["Phone Number"]),
                     )
                     self.admin_window.details_table.setItem(
                         current_index,

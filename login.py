@@ -1,8 +1,7 @@
-from abc import ABC, abstractmethod
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Login(ABC):
+class Login:
     def setupUi_login(self, Login):
         Login.setObjectName("Login")
         Login.resize(1200, 600)
@@ -62,24 +61,24 @@ class Login(ABC):
         self.cnic_line_edit.setObjectName("cnic_line_edit")
         self.cnic_line_edit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("[0-9]{13}"), self.cnic_line_edit))
         self.verticalLayout_3.addWidget(self.cnic_line_edit)
-        self.account_label_login = QtWidgets.QLabel(self.inputFieldsframe)
-        self.account_label_login.setStyleSheet("* {\n"
+        self.phone_number_login_label = QtWidgets.QLabel(self.inputFieldsframe)
+        self.phone_number_login_label.setStyleSheet("* {\n"
                                                "    font: 12pt \"Modern No. 20\";\n"
                                                "    color:green;\n"
                                                "    padding:0px 5px;\n"
                                                "}")
-        self.account_label_login.setObjectName("account_label_login")
-        self.verticalLayout_3.addWidget(self.account_label_login)
-        self.account_edit_login = QtWidgets.QLineEdit(self.inputFieldsframe)
-        self.account_edit_login.setStyleSheet("* {\n"
+        self.phone_number_login_label.setObjectName("phone_number_login_label")
+        self.verticalLayout_3.addWidget(self.phone_number_login_label)
+        self.phone_number_login = QtWidgets.QLineEdit(self.inputFieldsframe)
+        self.phone_number_login.setStyleSheet("* {\n"
                                               "    font: 12pt \"Modern No. 20\";\n"
                                               "    color:green;\n"
                                               "    padding:3px 10px;\n"
                                               "    border:1px solid darkgreen;\n"
                                               "    border-radius:5px;\n"
                                               "}")
-        self.account_edit_login.setObjectName("account_edit_login")
-        self.verticalLayout_3.addWidget(self.account_edit_login)
+        self.phone_number_login.setObjectName("phone_number_login")
+        self.verticalLayout_3.addWidget(self.phone_number_login)
         self.password_login = QtWidgets.QLabel(self.inputFieldsframe)
         self.password_login.setStyleSheet("* {\n"
                                           "    font: 12pt \"Modern No. 20\";\n"
@@ -136,21 +135,13 @@ class Login(ABC):
             "Login", "Input Computerized National Identity Card Number here"))
         self.cnic_line_edit.setPlaceholderText(
             _translate("Login", "XXXXXXXXXXXXX"))
-        self.account_label_login.setText(_translate("Login", "Account Name:"))
-        self.account_edit_login.setPlaceholderText(
-            _translate("Login", "Super Account"))
+        self.phone_number_login_label.setText(_translate("Login", "Phone Number:"))
+        self.phone_number_login.setPlaceholderText(
+            _translate("Login", "+92XXXXXXXXXX"))
         self.password_login.setText(_translate("Login", "Password:"))
         self.password_login_edit.setPlaceholderText(
             _translate("Login", "XXXXXXXXXXX"))
         self.submit_login.setText(_translate("Login", "Login"))
-    @abstractmethod
+        
     def checkCredentials(self):
         pass
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    Login = QtWidgets.QMainWindow()
-    ui = Ui_Login()
-    ui.setupUi_login(Login)
-    Login.show()
-    sys.exit(app.exec_())

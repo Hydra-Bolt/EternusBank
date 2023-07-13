@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from abc import ABC, abstractmethod
 
-class LoanApp(ABC):
+
+class LoanApp:
     def setupLoanApp(self, Loan):
         # Set up the main window properties
         Loan.setObjectName("Loan")
@@ -43,6 +43,7 @@ class LoanApp(ABC):
         self.verticalLayout.addWidget(self.months_slider)
         
         self.months_loan = QtWidgets.QLabel(Loan)
+        self.months_loan.setMaximumHeight(70)
         self.months_loan.setStyleSheet("font: 16pt \"Modern No. 20\";")
         self.months_loan.setObjectName("ask_loan")
         self.verticalLayout.addWidget(self.months_loan)
@@ -72,11 +73,9 @@ class LoanApp(ABC):
         self.ask_loan.setText(_translate("Loan", "What will be your starting Loan?"))
         self.loan_amount.setPlaceholderText(_translate("Loan", "Enter here"))
 
-    @abstractmethod
     def accept(self):
         pass
 
-    @abstractmethod
     def reject(self):
         pass
     def slider_change(self):

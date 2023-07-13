@@ -5,6 +5,7 @@ class DashBoard:
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1200, 700)
         MainWindow.setMinimumSize(1200, 700)
+        MainWindow.setMaximumSize(16777215, 16777215)
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -159,7 +160,7 @@ class DashBoard:
                                       "}")
         self.btn_page_3.setText("")
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("icons/transaction.png"),
+        icon3.addPixmap(QtGui.QPixmap("icons/transactions.png"),
                         QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_page_3.setIcon(icon3)
         self.btn_page_3.setObjectName("btn_page_3")

@@ -52,8 +52,11 @@ class Customer:
             self.current_account["Net Pay"] = self.current.withdraw(amount)
 
             return amount
+        init = self.current_account["Balance"]
         self.current_account["Balance"] = self.current.withdraw(amount)
-        self.current_account["Transactions"].append(["Withdraw", formatted_date, amount])
+        fin = self.current_account["Balance"]
+        if init!=fin:
+            self.current_account["Transactions"].append(["Withdraw", formatted_date, amount])
         self.balanceUpdate()
 
     def balanceUpdate(self):
