@@ -1,3 +1,4 @@
+import ctypes
 from Customer import Customer
 import DesignClass
 import contextlib
@@ -7,7 +8,7 @@ import random
 from datetime import datetime, timedelta, date
 import importlib
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from report import Report
 importlib.reload(DesignClass)
 import pyperclip
 
@@ -156,10 +157,10 @@ class Bank(DesignClass.MasterGUI):
                     "CNIC found making another account.",
                 )
                 if (
-                    self.account
-                    in self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0][
+                    self.account["Phone Number"]
+                    == self.userAccountInfo.find({"CNIC": self.info["CNIC"]})[0][
                         "Accounts"
-                    ]
+                    ]["Phone Number"]
                 ):
                     QtWidgets.QMessageBox.information(
                         self.MainWindow,
@@ -284,18 +285,16 @@ class Bank(DesignClass.MasterGUI):
 
         # Populate the list of accounts for the transfer
         width = self.listofaccounts.geometry().width()
-        width/=2
+        width//=2
         self.listofaccounts.addItem(
-            f"{'Card Number'.ljust(int(width))}{'CNIC'.rjust(int(width))}"
+            f"{'Card Number'.ljust(width)}{'CNIC'.rjust(width)}"
         )
         for i in self.userAccountInfo.data_records:
             for account in i["Accounts"]:
                 if account!=self.account:
                     card_numer = account["Card Number"]
                     cnic = i["CNIC"]
-                    self.listofaccounts.addItem(
-                        f"{card_numer.ljust(int(width))}{cnic.rjust(int(width))}"
-                    )
+                    self.listofaccounts.addItem(f"{card_numer.ljust(width)}{cnic.rjust(width)}")
 
         # calculates the average income and the average expense and initiates the customer class
         self.averageCalculate()
@@ -323,7 +322,9 @@ class Bank(DesignClass.MasterGUI):
 
     def deposit_money(self):
         """Deposits the money entered in the feild of deposit entry"""
+        init = self.current_customer.current_account["Balance"]
         self.current_customer.deposit()
+        fin = self.current_customer.current_account["Balance"]
         print(self.current_customer.current_account["Balance"])
         self.saveToDB()
         self.averageCalculate()
@@ -332,7 +333,7 @@ class Bank(DesignClass.MasterGUI):
         QtWidgets.QMessageBox.information(
             self.MainWindow,
             "Deposit",
-            "The amount has been deposited successfully.\nPlease do not deposit again.",
+            "The amount has been deposited successfully.\n." if init!=fin else "Couldn't Deposit the amount provided.\nPlease recheck the amount again."
         )
 
     def withdraw_money(self):
@@ -536,7 +537,132 @@ class Bank(DesignClass.MasterGUI):
                 self.number_2.setText(hide * len(self.account["Card Number"]))
                 self.acc_number.setText(hide * len(self.account["Card Number"]))
                 self.number.setText(hide * len(self.account["Card Number"]))
+    def generateReport(self):
+        QtWidgets.QMessageBox.information(
+                    self.MainWindow, "Report Generate", "Report Generating."
+                    
+                )
+        report = Report()
+        report.add_page()
+        report.set_auto_page_break(auto=True, margin=15)
+        report.set_font("Arial", "", 10)
 
+        report.chapter_title("Account Information")
+        print("output\n", self.output)
+        print("account\n",self.account)
+        try:
+            report.chapter_body(
+                [
+                    {"Full Name": self.output[0]["Full Name"]},
+                    {"CNIC": self.output[0]["CNIC"]},
+                    {"Phone Number": self.account["Phone Number"]},
+                    {"Account Number": self.account["Account Number"]},
+                    {"Account Type": self.account["Account Type"]},
+                    {"Balance": self.account["Balance"]},
+                    {"Card Number": self.account["Card Number"]},
+                    {"Expiry Date": self.account["Expiry Date"][0]},
+                ]
+            )
+        except KeyError:
+            report.chapter_body(
+                [
+                    {"Full Name": self.output[0]["Full Name"]},
+                    {"CNIC": self.output[0]["CNIC"]},
+                    {"Phone Number": self.account["Phone Number"]},
+                    {"Account Number": self.account["Account Number"]},
+                    {"Account Type": self.account["Account Type"]},
+                    {"Balance": self.account["Balance"]},
+                    {"Card Number": self.account["Card Number"]},
+                    {"Expiry Date": self.account["Due Dates"][(list(self.account["Due Dates"].keys())[-1])]},
+                ]
+            )
+        report.chapter_title("Transactions")
+        report.chapter_body([{"Transactions": self.account["Transactions"]}])
+
+        report.add_page()
+        report.chapter_title("Recent Transaction Graph")
+        try:
+            if self.account["Transactions"] != []:
+                self.generate_graph(self.account)
+                report.image(f"./customer_graphs/{self.account['Account Number']}.png", w=200)
+            else:
+                report.chapter_body({"Transactions": "No Transactions to plot"})
+        except:pass
+        report.output(f"./customer_reports/{self.output[0]['Full Name']}_{self.output[0]['CNIC']}.pdf")
+        import subprocess
+        subprocess.Popen([f"./customer_reports/{self.output[0]['Full Name']}_{self.output[0]['CNIC']}.pdf"],shell=True)
+
+    def generate_graph(self, account):
+        import pandas as pd
+        import datetime
+        import matplotlib.pyplot as plt
+
+        transaction_history = []
+        transaction_dates = {}
+
+        for transaction in account["Transactions"]:
+            if transaction[1] not in transaction_dates:
+                transaction_dates[transaction[1]] = []
+            if transaction[0] == "Withdraw":
+                transaction_dates[transaction[1]].append(-int(transaction[2]))
+            else:
+                transaction_dates[transaction[1]].append(int(transaction[2]))
+
+        transaction_history = list(transaction_dates.keys())
+        transaction_money = [sum(date) for date in transaction_dates.values()]
+
+        transaction_history = pd.Series(transaction_history)
+        transaction_history = pd.DataFrame(
+            transaction_history, columns=["Transaction Dates"]
+        )
+        transaction_history["Amount"] = transaction_money
+
+        if len(transaction_history["Transaction Dates"]) >= 7:
+            transaction_history["Transaction Dates"] = transaction_history["Transaction Dates"][:7]
+        elif len(transaction_history["Transaction Dates"]) < 7:
+            rem_dates = 7 - len(transaction_history["Transaction Dates"])
+            new_list = []
+            for i in range(rem_dates):
+                new_date = (
+                    datetime.datetime.strptime(
+                        transaction_history["Transaction Dates"][0], "%d/%m/%Y"
+                    ).date()
+                    - datetime.timedelta(days=i + 1)
+                ).strftime("%d/%m/%Y")
+                new_list.append(new_date)
+            new_list.reverse()
+            new_list.extend(transaction_history["Transaction Dates"])
+
+        transaction_history = pd.DataFrame(new_list, columns=["Transaction Dates"])
+
+        transaction_money.reverse()
+        transaction_money = transaction_money + [0 for i in range(rem_dates)]
+        transaction_money.reverse()
+
+        transaction_history["Amount"] = transaction_money
+
+        font = {"fontname": "Arial", "fontsize": 14}
+        fig = plt.figure(figsize=(12, 4))
+        ax = plt.axes(facecolor="white")
+        ax.spines["top"].set_color("white")
+        ax.spines["right"].set_color("white")
+
+        plt.xticks(**font)
+        plt.yticks(**font)
+
+        buffer = 0
+        plt.ylim(min(transaction_money) - buffer, max(transaction_money) + buffer)
+
+        plt.bar(
+            transaction_history["Transaction Dates"],
+            transaction_history["Amount"],
+            color=[
+                "green" if amount >= 0 else "red"
+                for amount in transaction_history["Amount"]
+            ],
+        )
+
+        plt.savefig(f"./customer_graphs/{account['Account Number']}.png")
     def setTransactions(self):
         print("called")
         style_deposit = "*{color:green;}"
@@ -567,9 +693,10 @@ class Bank(DesignClass.MasterGUI):
 
         transactions:list = (self.account["Transactions"])[:-4:-1]
         # transactions.reverse()
+        length = len(transactions)
         self.no_transactions.hide()
 
-        if len(transactions) > 2:
+        if length > 2:
             # Display transaction information for the latest three transactions
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
@@ -582,7 +709,7 @@ class Bank(DesignClass.MasterGUI):
             self.withdraw_3.setText(transactions[-3][0])
             self.date_3.setText(transactions[-3][1])
             self.amount_3.setText(str(transactions[-3][2]))
-        elif len(transactions) == 2:
+        elif length == 2:
             # Display transaction information for the latest two transactions
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
@@ -594,7 +721,7 @@ class Bank(DesignClass.MasterGUI):
 
             # Hide the third transaction QLabel widget
             self.transaction_3.hide()
-        elif len(transactions) == 1:
+        elif length == 1:
             # Display transaction information for the latest transaction
             self.withdrawn_1.setText(transactions[-1][0])
             self.date_1.setText(transactions[-1][1])
@@ -616,7 +743,7 @@ class Bank(DesignClass.MasterGUI):
             [self.transaction_3, self.transaction_2, self.transaction_1]
         ):
             current = j.styleSheet()
-            with contextlib.suppress(IndexError):
+            if i<length:
                 print(transactions)
                 if (
                     transactions[i][0] == "Withdraw"
@@ -628,6 +755,9 @@ class Bank(DesignClass.MasterGUI):
                     print(transactions[i][0])
                     current += style_deposit
                     j.setStyleSheet(current)
+            else:
+                pass
+        self.verticalLayout_21.addWidget(self.generate_report, 0, QtCore.Qt.AlignHCenter)
 
     # Loan Methods
 
@@ -820,6 +950,7 @@ class Bank(DesignClass.MasterGUI):
 
 app = QtWidgets.QApplication(sys.argv)
 MainWindow = QtWidgets.QMainWindow()
-
+myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 bank = Bank(MainWindow=MainWindow)
 sys.exit(app.exec_())

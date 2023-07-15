@@ -23,7 +23,7 @@ class Customer:
         current_date = date.today()
         formatted_date = current_date.strftime("%d/%m/%Y")
         try:
-            amount = int(self.deposit_edit.text())
+            amount = float(self.deposit_edit.text())
             self.deposit_edit.setText("")
         except:
             print("NAN")

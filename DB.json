@@ -8,7 +8,7 @@
         "Account Number": "ETR-398120-189926",
         "Account Type": "Checking Account",
         "Password": "asd",
-        "Balance": 19911.0,
+        "Balance": 19923.0,
         "Card Number": "635304786926068",
         "Expiry Date": [
           "07/2028",
@@ -50,6 +50,11 @@
             "Deposit",
             "13/07/2023",
             266
+          ],
+          [
+            "Deposit",
+            "14/07/2023",
+            12
           ]
         ],
         "Overdraft": 500
@@ -189,8 +194,64 @@
         "Account Number": "ETR-885933-558214",
         "Account Type": "Checking Account",
         "Password": "asd",
-        "Balance": 0,
+        "Balance": 7867.0,
         "Card Number": "513938411896344",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [
+          [
+            "Deposit",
+            "14/07/2023",
+            123
+          ],
+          [
+            "Withdraw",
+            "14/07/2023",
+            123.0
+          ],
+          [
+            "Deposit",
+            "14/07/2023",
+            200
+          ],
+          [
+            "Withdraw",
+            "14/07/2023",
+            12.0
+          ],
+          [
+            "Deposit",
+            "14/07/2023",
+            12.0
+          ],
+          [
+            "Deposit",
+            "14/07/2023",
+            5555.0
+          ],
+          [
+            "Deposit",
+            "15/07/2023",
+            5000.0
+          ],
+          [
+            "Withdraw",
+            "15/07/2023",
+            2888.0
+          ]
+        ],
+        "Overdraft": 500
+      },
+      {
+        "Phone Number": "3111111111",
+        "Account Number": "ETR-553070-598163",
+        "Account Type": "Checking Account",
+        "Password": "asd",
+        "Balance": 0,
+        "Card Number": "3760196979695042",
         "Expiry Date": [
           "07/2028",
           "July",
@@ -327,6 +388,91 @@
             "Deposit",
             "13/07/2023",
             120
+          ]
+        ],
+        "Overdraft": 500
+      }
+    ]
+  },
+  {
+    "Full Name": "asd",
+    "CNIC": "7777777777777",
+    "Accounts": [
+      {
+        "Phone Number": "3222222222",
+        "Account Number": "ETR-843129-299931",
+        "Account Type": "Checking Account",
+        "Password": "asd",
+        "Balance": 0,
+        "Card Number": "565561770565246",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [],
+        "Overdraft": 500
+      }
+    ]
+  },
+  {
+    "Full Name": "asd",
+    "CNIC": "1222222222222",
+    "Accounts": [
+      {
+        "Phone Number": "3555555555",
+        "Account Number": "ETR-666634-104277",
+        "Account Type": "Checking Account",
+        "Password": "asd",
+        "Balance": 277,
+        "Card Number": "697289027032621",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [
+          [
+            "Deposit",
+            "14/07/2023",
+            277
+          ]
+        ],
+        "Overdraft": 500
+      }
+    ]
+  },
+  {
+    "Full Name": "Muneeb",
+    "CNIC": "4123222222222",
+    "Accounts": [
+      {
+        "Phone Number": "3312222222",
+        "Account Number": "ETR-840810-152059",
+        "Account Type": "Checking Account",
+        "Password": "muneeb123",
+        "Balance": 763.0,
+        "Card Number": "559878554393870",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [
+          [
+            "Deposit",
+            "15/07/2023",
+            400.0
+          ],
+          [
+            "Deposit",
+            "15/07/2023",
+            400.0
+          ],
+          [
+            "Withdraw",
+            "15/07/2023",
+            37.0
           ]
         ],
         "Overdraft": 500

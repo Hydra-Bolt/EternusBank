@@ -78,6 +78,7 @@ class Login:
                                               "    border-radius:5px;\n"
                                               "}")
         self.phone_number_login.setObjectName("phone_number_login")
+        self.phone_number_login.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("(\+92|0)?3[0-9]{2}-?[0-9]{7}"), self.phone_number_login))
         self.verticalLayout_3.addWidget(self.phone_number_login)
         self.password_login = QtWidgets.QLabel(self.inputFieldsframe)
         self.password_login.setStyleSheet("* {\n"

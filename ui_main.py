@@ -818,7 +818,10 @@ class DashBoard:
         self.transfer_button.clicked.connect(self.transfer_funds)
         self.verticalLayout_19.addWidget(
             self.transfer_button, 0, QtCore.Qt.AlignHCenter)
-
+        self.generate_report = QtWidgets.QPushButton(self.transactions)
+        self.generate_report.setMinimumHeight(30)
+        self.generate_report.setStyleSheet('font: 20pt "Modern No. 20";color:blue;padding:3px 20px;border:2px solid darkblue;border-radius:5px;')
+        self.generate_report.clicked.connect(self.generateReport)
         self.horizontalLayout_15.addWidget(self.transfer_frame)
         self.verticalLayout_8.addWidget(self.main_frame_transactions)
         self.responsivePages.addWidget(self.Transactions)
@@ -894,7 +897,7 @@ class DashBoard:
         self.select_label.setText(_translate(
             "MainWindow", "Select the account the transfer to:"))
         self.transfer_button.setText(_translate("MainWindow", "Transfer"))
-
+        self.generate_report.setText(_translate("MainWindow", "Generate Report"))
 
 if __name__ == "__main__":
     import sys

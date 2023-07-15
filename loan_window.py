@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Loan:
+class LoanWindow:
     def setupUi_loan(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1091, 600)

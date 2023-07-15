@@ -20,7 +20,7 @@ importlib.reload(login)
 importlib.reload(create_account)
 
 
-class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login, main.Home, loanApp.LoanApp, loan_window.Loan):
+class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login, main.Home, loanApp.LoanApp, loan_window.LoanWindow):
     def __init__(self, MainWindow):
         self.MainWindow = MainWindow
         self.setupUi_intro(self.MainWindow)
