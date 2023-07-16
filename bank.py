@@ -1,15 +1,11 @@
 import ctypes
 from Customer import Customer
 import DesignClass
-import contextlib
-import time
 import sys
 import random
 from datetime import datetime, timedelta, date
-import importlib
 from PyQt5 import QtCore, QtGui, QtWidgets
 from report import Report
-importlib.reload(DesignClass)
 import pyperclip
 
 
@@ -230,7 +226,7 @@ class Bank(DesignClass.MasterGUI):
                         break
                 else:
                     QtWidgets.QMessageBox.warning(
-                        self.MainWindow, "Account Login", "Incorrect Phone Number."
+                        self.MainWindow, "Account Login", "Incorrect Phone Number. Or Account Has been deleted. Contact our Helpline for further assistance."
                     )
                     return
 
@@ -590,7 +586,7 @@ class Bank(DesignClass.MasterGUI):
         except:pass
         report.output(f"./customer_reports/{self.output[0]['Full Name']}_{self.output[0]['CNIC']}.pdf")
         import subprocess
-        subprocess.Popen([f"./customer_reports/{self.output[0]['Full Name']}_{self.output[0]['CNIC']}.pdf"],shell=True)
+        subprocess.Popen([f"customer_reports/{self.output[0]['Full Name']}_{self.output[0]['CNIC']}.pdf"],shell=True)
 
     def generate_graph(self, account):
         import pandas as pd
@@ -737,6 +733,7 @@ class Bank(DesignClass.MasterGUI):
             self.transaction_1.hide()
             self.no_transactions.show()
             self.verticalLayout_21.addWidget(self.no_transactions)
+            self.verticalLayout_21.addWidget(self.generate_report, 0, QtCore.Qt.AlignHCenter)
             return
 
         for i, j in enumerate(
