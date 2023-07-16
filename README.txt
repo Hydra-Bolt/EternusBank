@@ -19,6 +19,12 @@ Create Account:
 6. Press the submit button
 7. Skip to DashBoard in these Instructions
 
+For Loan Account:
+
+1. Enter the amount of money you want to Loan
+2. Adjust the slider for the duration of Pay
+3. Press OK
+
 Login:
 
 1. Enter CNIC(Must be of length 13).
@@ -32,6 +38,12 @@ DashBoard:
 3. Card page will show your card. there are buttons you can use to copy details, there is also a button to copy all details, and to reveal the details.
 4. Transaction page will be for your transaction, Withdraw, Deposit, Transfer funds.
 5. You can Logout anytime by clicking the button in the bottom left corner.
+
+For Loan Account:
+
+1. Youll see your current due date and the amount to be paid
+2. Simply enter the amount in the entry.
+3. Repay button to repay.
 
 Admin:
 
@@ -59,3 +71,5 @@ Important files and their purposes.
 3. bank.py --> Main bank application
 4. database.py --> A self made database manager.
 
+Customer Reports can be found in customer_reports folder
+Customer Graphs can be found in customer_graphs folder

@@ -97,6 +97,7 @@ class Login:
                                                "    border-radius:5px;\n"
                                                "}")
         self.password_login_edit.setObjectName("password_login_edit")
+        self.password_login_edit.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("^.{1,15}$"), self.password_login_edit))
         self.password_login_edit.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout_3.addWidget(self.password_login_edit)
         self.buttonframe = QtWidgets.QFrame(self.inputFieldsframe)

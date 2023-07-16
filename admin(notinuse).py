@@ -5,25 +5,19 @@ from report import Report
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import sys
-import ctypes
 
-class Admin:
+
+class Admin(AdminLogin, AdminWindow):
     def __init__(self, Window: QtWidgets.QMainWindow) -> None:
-        super().__init__()
         self.setupDB()
-        self.admin_login = AdminLogin()
-        self.admin_window = AdminWindow()
         self.Window = Window
-        self.Window.setWindowIcon(QtGui.QIcon("./icons/logo_title.png"))
-        self.admin_login.setup_ALoginUi(self.Window)
-        self.admin_login.submit_button.clicked.connect(self.authenticateLogin)
+        self.setup_ALoginUi(self.Window)
         self.Window.show()
 
     def authenticateLogin(self):
-        admins = {"Muneeb": "muneeb123123", "Tehreem": "tehreemkhan6677"}
-        self.adminname = self.admin_login.user_edit.text()
-        if self.adminname in admins:
-            if admins[self.admin_login.user_edit.text()] == self.admin_login.password_edit.text():
+        admins = {"Muneeb": "muneeb123123", "Tehreem": "tehreemkhan6677","a":"a"}
+        if self.user_edit.text() in admins:
+            if admins[self.user_edit.text()] == self.password_edit.text():
                 self.openWindow()
             else:
                 QtWidgets.QMessageBox.warning(
@@ -39,109 +33,110 @@ class Admin:
         )
 
     def generateReport(self):
-        dialog = QtWidgets.QDialog()
-        dialog.setWindowTitle("Delete Record")
-        dialog.setStyleSheet(
+        """Generates Report for the User"""
+
+        # Create a new dialog window
+        self.dialog = QtWidgets.QDialog()
+        self.dialog.setWindowTitle("Delete Record")
+        self.dialog.setStyleSheet(
             'font: 16pt "Modern No. 20";border-radius:5px;border:1px solid black;padding:6px'
         )
-        dialog.setMinimumSize(600, 400)
-        dialog.resize(600, 400)
+        self.dialog.setMinimumSize(600, 400)
+        self.dialog.resize(600, 400)
 
-        combo_box = QtWidgets.QComboBox(dialog)
+        # Create combo box, label, and buttons
+        combo_box = QtWidgets.QComboBox(self.dialog)
         label = QtWidgets.QLabel(
-            "Select which account you would like the report of:", dialog
+            "Select which account you would like the report of:", self.dialog
         )
-        ok_button = QtWidgets.QPushButton("OK", dialog)
-        cancel_button = QtWidgets.QPushButton("Cancel", dialog)
+        ok_button = QtWidgets.QPushButton("OK", self.dialog)
+        cancel_button = QtWidgets.QPushButton("Cancel", self.dialog)
 
-        records = [str(i) for i in range(1, self.admin_window.details_table.rowCount() + 1)]
+        # Populate combo box with numbers
+        records = [str(i) for i in range(1, self.details_table.rowCount() + 1)]
         combo_box.addItems(records)
 
-        layout = QtWidgets.QVBoxLayout(dialog)
+        # Layout configuration
+        layout = QtWidgets.QVBoxLayout(self.dialog)
         layout.addWidget(label)
         layout.addWidget(combo_box)
         layout.addStretch(1)
-
         button_layout = QtWidgets.QHBoxLayout()
         button_layout.addWidget(ok_button)
         button_layout.addWidget(cancel_button)
         layout.addLayout(button_layout)
 
-        ok_button.clicked.connect(dialog.accept)
-        cancel_button.clicked.connect(dialog.reject)
+        # Connect the button signals to their respective functions
+        ok_button.clicked.connect(self.dialog.accept)
+        cancel_button.clicked.connect(self.dialog.reject)
 
-        if dialog.exec_() != QtWidgets.QDialog.Accepted:
+        # Check if the dialog was accepted or rejected
+        if self.dialog.exec_() != QtWidgets.QDialog.Accepted:
             return
 
+        # Get the selected record from the combo box and retrieve associated details
         record = int(combo_box.currentText()) - 1
-        cnic = self.admin_window.details_table.item(record, 1).text()
-        acc_num = self.admin_window.details_table.item(record, 2).text()
+        cnic = self.details_table.item(record, 1).text()
+        acc_num = self.details_table.item(record, 2).text()
 
+        # Retrieve account information from the database
         out = (self.userAccountInfo.find({"CNIC": cnic}))[0]
         accounts: list = out["Accounts"]
 
+        # Find the selected account based on the account number
         for account in accounts:
             if account["Account Number"] == acc_num:
                 break
 
+        # Create a new report instance
         report = Report()
         report.add_page()
         report.set_auto_page_break(auto=True, margin=15)
         report.set_font("Arial", "", 10)
 
+        # Add chapter title and body for account information
         report.chapter_title("Account Information")
-        try:
-            report.chapter_body(
-                [
-                    {"Full Name": out["Full Name"]},
-                    {"CNIC": out["CNIC"]},
-                    {"Phone Number": account["Phone Number"]},
-                    {"Account Number": account["Account Number"]},
-                    {"Account Type": account["Account Type"]},
-                    {"Balance": account["Balance"]},
-                    {"Card Number": account["Card Number"]},
-                    {"Expiry Date": account["Expiry Date"][0]},
-                ]
-            )
-        except:
-            report.chapter_body(
-                [
-                    {"Full Name": out["Full Name"]},
-                    {"CNIC": out["CNIC"]},
-                    {"Phone Number": account["Phone Number"]},
-                    {"Account Number": account["Account Number"]},
-                    {"Account Type": account["Account Type"]},
-                    {"Balance": account["Balance"]},
-                    {"Card Number": account["Card Number"]},
-                    {"Current Due Date": next((key for key, value in account["Due Dates"].items() if value != 0), "Paid Off")},
-                    {"Expiry Date": (list(account["Due Dates"].keys())[-1])},
-                ]
-            )
-        try:
-            report.chapter_title("Transactions")
-            report.chapter_body([{"Transactions": account["Transactions"]}])
+        report.chapter_body(
+            [
+                {"Full Name": out["Full Name"]},
+                {"CNIC": out["CNIC"]},
+                {"Phone Number": account["Phone Number"]},
+                {"Account Number": account["Account Number"]},
+                {"Account Type": account["Account Type"]},
+                {"Balance": account["Balance"]},
+                {"Card Number": "3759577752541257"},
+                {"Expiry Date": account["Expiry Date"][0]},
+            ]
+        )
 
-            report.add_page()
-            report.chapter_title("Recent Transaction Graph")
-            if account["Transactions"] != []:
-                self.generate_graph(account)
-                report.image(f"./customer_graphs/{account['Account Number']}.png", w=200)
-            else:
-                report.chapter_body({"Transactions": "No Transactions to plot"})
-        except:
-            report.chapter_title("No Graph for Loan Account")
+        # Add chapter title and body for transactions
+        report.chapter_title("Transactions")
+        report.chapter_body([{"Transactions": account["Transactions"]}])
 
+        # Add a new page and chapter title for recent transaction graph
+        report.add_page()
+        report.chapter_title("Recent Transaction Graph")
+
+        # Check if there are transactions to plot
+        if account["Transactions"] != []:
+            self.generate_graph(account)
+            report.image(f"./customer_graphs/{account['Account Number']}.png", w=200)
+        else:
+            report.chapter_body({"Transactions": "No Transactions to plot"})
+
+        # Generate the PDF report file
         report.output(f"./customer_reports/{out['Full Name']}_{out['CNIC']}.pdf")
         os.system(f"./customer_reports/{out['Full Name']}_{out['CNIC']}.pdf")
-
     def generate_graph(self, account):
         import pandas as pd
         import datetime
         import matplotlib.pyplot as plt
 
+        # Initializing variables
         transaction_history = []
         transaction_dates = {}
 
+        # Iterate through each transaction in the account's transaction list
         for transaction in account["Transactions"]:
             if transaction[1] not in transaction_dates:
                 transaction_dates[transaction[1]] = []
@@ -150,17 +145,24 @@ class Admin:
             else:
                 transaction_dates[transaction[1]].append(int(transaction[2]))
 
+        # Extract unique transaction dates and calculate the total amount for each date
         transaction_history = list(transaction_dates.keys())
         transaction_money = [sum(date) for date in transaction_dates.values()]
 
+        # Create a pandas Series and DataFrame for the transaction history
         transaction_history = pd.Series(transaction_history)
         transaction_history = pd.DataFrame(
             transaction_history, columns=["Transaction Dates"]
         )
         transaction_history["Amount"] = transaction_money
 
+        # Limit the transaction history to the last 7 entries if there are more than 7
         if len(transaction_history["Transaction Dates"]) >= 7:
-            transaction_history["Transaction Dates"] = transaction_history["Transaction Dates"][:7]
+            transaction_history["Transaction Dates"] = transaction_history[
+                "Transaction Dates"
+            ][:7]
+
+        # Extend the transaction history with previous dates if there are less than 7 entries
         elif len(transaction_history["Transaction Dates"]) < 7:
             rem_dates = 7 - len(transaction_history["Transaction Dates"])
             new_list = []
@@ -178,7 +180,7 @@ class Admin:
         transaction_history = pd.DataFrame(new_list, columns=["Transaction Dates"])
 
         transaction_money.reverse()
-        transaction_money = transaction_money + [0 for i in range(rem_dates)]
+        transaction_money += [0 for _ in range(rem_dates)]
         transaction_money.reverse()
 
         transaction_history["Amount"] = transaction_money
@@ -189,60 +191,64 @@ class Admin:
         ax.spines["top"].set_color("white")
         ax.spines["right"].set_color("white")
 
+        # Set font properties for x and y ticks
         plt.xticks(**font)
         plt.yticks(**font)
 
-        buffer = 100
-        plt.ylim(min(transaction_money) - buffer, max(transaction_money) + buffer)
+        # sets the buffer for limits
+        # Set the y-axis limits based on the minimum and maximum transaction amounts
+        plt.ylim(min(transaction_money), max(transaction_money))
 
+        # Plot a bar graph of the transaction dates and amounts
         plt.bar(
             transaction_history["Transaction Dates"],
             transaction_history["Amount"],
-            color=[
-                "green" if amount >= 0 else "red"
-                for amount in transaction_history["Amount"]
-            ],
+            color=["green" if amount >= 0 else "red" for amount in transaction_history["Amount"]],
         )
 
+
+        # Save the graph as a PNG file
         plt.savefig(f"./customer_graphs/{account['Account Number']}.png")
 
     def deleteRecords(self):
-        dialog = QtWidgets.QDialog()
-        dialog.setWindowTitle("Delete Record")
-        dialog.setStyleSheet(
+        """Deletes a record at a certain index"""
+        self.dialog = QtWidgets.QDialog()
+        self.dialog.setWindowTitle("Delete Record")
+        self.dialog.setStyleSheet(
             'font: 16pt "Modern No. 20";border-radius:5px;border:1px solid black;padding:6px'
         )
-        dialog.setMinimumSize(600, 400)
-        dialog.resize(600, 400)
+        self.dialog.setMinimumSize(600, 400)
+        self.dialog.resize(600, 400)
+        combo_box = QtWidgets.QComboBox(self.dialog)
+        label = QtWidgets.QLabel("Select record to delete:", self.dialog)
+        ok_button = QtWidgets.QPushButton("OK", self.dialog)
+        cancel_button = QtWidgets.QPushButton("Cancel", self.dialog)
 
-        combo_box = QtWidgets.QComboBox(dialog)
-        label = QtWidgets.QLabel("Select record to delete:", dialog)
-        ok_button = QtWidgets.QPushButton("OK", dialog)
-        cancel_button = QtWidgets.QPushButton("Cancel", dialog)
-
-        records = [str(i) for i in range(1, self.admin_window.details_table.rowCount() + 1)]
+        # Populate combo box with numbers
+        records = [str(i) for i in range(1, self.details_table.rowCount() + 1)]
         combo_box.addItems(records)
 
-        layout = QtWidgets.QVBoxLayout(dialog)
+        # Layout configuration
+        layout = QtWidgets.QVBoxLayout(self.dialog)
         layout.addWidget(label)
         layout.addWidget(combo_box)
         layout.addStretch(1)
-
         button_layout = QtWidgets.QHBoxLayout()
         button_layout.addWidget(ok_button)
         button_layout.addWidget(cancel_button)
         layout.addLayout(button_layout)
 
-        ok_button.clicked.connect(dialog.accept)
-        cancel_button.clicked.connect(dialog.reject)
+        # Connect the button signals to their respective functions
+        ok_button.clicked.connect(self.dialog.accept)
+        cancel_button.clicked.connect(self.dialog.reject)
 
-        if dialog.exec_() == QtWidgets.QDialog.Accepted:
+        if self.dialog.exec_() == QtWidgets.QDialog.Accepted:
             self.deleteRecord(combo_box.currentText())
 
     def deleteRecord(self, record) -> None:
         record = int(record) - 1
-        cnic = self.admin_window.details_table.item(record, 1).text()
-        acc_num = self.admin_window.details_table.item(record, 2).text()
+        cnic = self.details_table.item(record, 1).text()
+        acc_num = self.details_table.item(record, 2).text()
 
         out = (self.userAccountInfo.find({"CNIC": cnic}))[0]
         accounts: list = out["Accounts"]
@@ -256,7 +262,7 @@ class Admin:
 
     def updateRecords(self, row, column):
         """Updates Records for every changes in tables"""
-        item = self.admin_window.details_table.item(row, column)
+        item = self.details_table.item(row, column)
         if item is None:
             QtWidgets.QMessageBox.critical(
                 self.Window,
@@ -266,9 +272,9 @@ class Admin:
             return
         changed_value = item.text()
         changed_key = self.fields[column]
-        cnic_item = self.admin_window.details_table.item(row, 1)
-        c_number_item = self.admin_window.details_table.item(row, 4)
-        ac_number_item = self.admin_window.details_table.item(row,2)
+        cnic_item = self.details_table.item(row, 1)
+        c_number_item = self.details_table.item(row, 4)
+        ac_number_item = self.details_table.item(row,2)
         
         if cnic_item is None or c_number_item is None or ac_number_item is None:
             return
@@ -283,11 +289,6 @@ class Admin:
                 for account in output["Accounts"]:
                     if account["Card Number"] == c_number:
                         break
-            elif changed_key == "Balance" or changed_key == "Net Pay":
-                changed_value = float(changed_value)
-                for account in output["Accounts"]:
-                    if account["Account Number"] == ac_number:
-                        break
             else:
                 for account in output["Accounts"]:
                     if account["Account Number"] == ac_number:
@@ -296,23 +297,12 @@ class Admin:
             account[changed_key] = changed_value
         self.userAccountInfo.update_insert({"CNIC": cnic_value}, output)
         self.userAccountInfo.updateDB()
-    
-    def openWindow(self):
-        self.Window.close()
-        self.admin_window.setup_AWindowUi(self.Window)
-        self.admin_window.delete_records.clicked.connect(self.deleteRecords)
-        self.admin_window.generate_report.clicked.connect(self.generateReport)
-        self.admin_window.details_table.cellChanged.connect(self.updateRecords)
-        self.admin_window.delete_records.clicked.connect(lambda: self.buttonclick(self.admin_window.delete_records))
-        self.admin_window.generate_report.clicked.connect(self.generateReport)
-        self.admin_window.generate_report.clicked.connect(lambda: self.buttonclick(self.admin_window.generate_report))
-        self.admin_window.hello.setText(f"Welcome, {self.adminname}")
-        self.admin_window.search.textChanged.connect(self.searchRecord)
-        self.admin_window.search.setPlaceholderText("Search...")
-        self.admin_window.delete_records.setText("Delete Record")
-        self.admin_window.generate_report.setText("Generate Report")
-        self.Window.show()
 
+    def openWindow(self):
+        """Opens Window for Admin and sets up table"""
+        self.Window.close()
+        self.setup_AWindowUi(self.Window)
+        self.Window.show()
         self.fields = [
             "Full Name",
             "CNIC",
@@ -322,101 +312,101 @@ class Admin:
             "Phone Number",
             "Balance",
         ]
-        self.admin_window.details_table.setColumnCount(len(self.fields))
-        self.admin_window.details_table.setHorizontalHeaderLabels(self.fields)
+        self.details_table.setColumnCount(len(self.fields))
+        self.details_table.setHorizontalHeaderLabels(self.fields)
         self.configTable()
 
     def configTable(self):
+        """Configures Table for DataRecords"""
         current_index = 0
         for record in self.userAccountInfo.data_records:
             name = record["Full Name"]
             cnic = record["CNIC"]
             accounts = record["Accounts"]
             for account in accounts:
-                self.admin_window.details_table.setRowCount(current_index + 1)
+                
+                self.details_table.setRowCount(current_index + 1)
+                # self.details_table.setVerticalHeaderItem(current_index, QtWidgets.QTableWidgetItem(current_index))
                 try:
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index, 0, QtWidgets.QTableWidgetItem(name)
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index, 1, QtWidgets.QTableWidgetItem(cnic)
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         2,
                         QtWidgets.QTableWidgetItem(account["Account Number"]),
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         3,
                         QtWidgets.QTableWidgetItem(account["Account Type"]),
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index, 4, QtWidgets.QTableWidgetItem(account["Card Number"])
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         5,
                         QtWidgets.QTableWidgetItem(account["Phone Number"]),
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         6,
                         QtWidgets.QTableWidgetItem(str(account["Balance"])),
                     )
                 except KeyError:
-                    self.admin_window.details_table.setItem(
+                    # self.details_table.setVerticalHeaderItem(current_index, QtWidgets.QTableWidgetItem(current_index))
+                    self.details_table.setItem(
                         current_index, 0, QtWidgets.QTableWidgetItem(name)
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index, 1, QtWidgets.QTableWidgetItem(cnic)
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         2,
                         QtWidgets.QTableWidgetItem(account["Account Number"]),
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         3,
                         QtWidgets.QTableWidgetItem(account["Account Type"]),
                     )
-                    self.admin_window.details_table.setItem(
-                        current_index,
-                        4,
-                        QtWidgets.QTableWidgetItem(account["Account Number"]),
+                    self.details_table.setItem(
+                        current_index, 4, QtWidgets.QTableWidgetItem(account["Card Number"])
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         5,
                         QtWidgets.QTableWidgetItem(account["Phone Number"]),
                     )
-                    self.admin_window.details_table.setItem(
+                    self.details_table.setItem(
                         current_index,
                         6,
                         QtWidgets.QTableWidgetItem(str(account["Net Pay"])),
                     )
-                current_index += 1  
-
+                current_index += 1
 
     def setupDB(self):
-            from database import Hakoniwa
+        """Sets up Database Instance with refrence to the local files"""
+        from database import Hakoniwa
 
-            self.userAccountInfo = Hakoniwa("DB.json")
-
+        self.userAccountInfo = Hakoniwa("DB.json")
 
     def searchRecord(self):
-        search_item = self.admin_window.search.text()
-        for row in range(self.admin_window.details_table.rowCount()):
-            for col in range(self.admin_window.details_table.columnCount()):
-                item = self.admin_window.details_table.item(row, col)
+        search_item = self.search.text()
+        for row in range(self.details_table.rowCount()):
+            for col in range(self.details_table.columnCount()):
+                item = self.details_table.item(row, col)
                 if item is None:
                     return
                 if search_item.lower() in item.text().lower() and search_item != "":
                     item.setBackground(QtGui.QColor("#D1FFDB"))
                 else:
                     item.setBackground(QtGui.QColor("white"))
-
 
     def buttonclick(self, button: QtWidgets.QPushButton):
         init_rect = button.geometry()
@@ -426,7 +416,6 @@ class Admin:
             init_rect.y() - new_rect.y() + int(new_rect.height() // 20),
         )
         button.setGeometry(new_rect)
-
         # Create a QTimer object
         self.timer1 = QtCore.QTimer()
         self.timer1.setSingleShot(True)  # Set the timer to fire only once
@@ -440,7 +429,6 @@ class Admin:
         # Start the timer with a timeout of 2000 milliseconds (2 seconds)
         self.timer1.start(100)
         button.setEnabled(False)
-
         try:
             # Create a QTimer object
             self.timer2 = QtCore.QTimer()
@@ -456,8 +444,5 @@ class Admin:
 
 app = QtWidgets.QApplication(sys.argv)
 Window = QtWidgets.QMainWindow()
-myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-
 ui = Admin(Window)
 sys.exit(app.exec_())

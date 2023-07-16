@@ -115,6 +115,7 @@ class CreateAccount:
                                         "    border-radius:5px;\n"
                                         "}")
         self.password_create.setObjectName("password_create")
+        self.password_create.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp("^.{1,15}$"), self.password_create))
         self.password_create.setEchoMode(QtWidgets.QLineEdit.Password)
         self.verticalLayout.addWidget(self.password_create)
         self.account_type_label = QtWidgets.QLabel(self.label_frames)

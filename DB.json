@@ -58,6 +58,37 @@
           ]
         ],
         "Overdraft": 500
+      },
+      {
+        "Phone Number": "3333333333",
+        "Account Number": "ETR-021796-228484",
+        "Account Type": "Checking Account",
+        "Password": "asd",
+        "Balance": 0,
+        "Card Number": "560011237933856",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [],
+        "Overdraft": 500
+      },
+      {
+        "Phone Number": "3457565656",
+        "Account Number": "ETR-373599-521004",
+        "Account Type": "Savings Account",
+        "Password": "asd4asdasd",
+        "Balance": 0,
+        "Card Number": "502130446578651",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [],
+        "Interest Rate": 0.005,
+        "Interest Add Date": "17/07/23"
       }
     ]
   },
@@ -139,7 +170,7 @@
         "Account Type": "Loan Account",
         "Password": "ddddddddddddddddd",
         "Net Pay": 4339,
-        "Card Number": "ETR-752339-548709",
+        "Card Number": "435527935014472",
         "Date Made": "13/07/23",
         "Due Dates": {
           "14/07/23": 0,
@@ -162,6 +193,26 @@
         ],
         "Transactions": [],
         "Overdraft": 500
+      },
+      {
+        "Phone Number": "3333333333",
+        "Account Number": "ETR-529635-889540",
+        "Account Type": "Loan Account",
+        "Password": "asd",
+        "Net Pay": 4640.0,
+        "Card Number": "3787627340064229",
+        "Date Made": "16/07/23",
+        "Due Dates": {
+          "17/07/23": 230.0,
+          "16/08/23": 630.0,
+          "15/09/23": 630.0,
+          "15/10/23": 630.0,
+          "14/11/23": 630.0,
+          "14/12/23": 630.0,
+          "13/01/24": 630.0,
+          "12/02/24": 630.0
+        },
+        "Balance": 4640.0
       }
     ]
   },
@@ -270,6 +321,27 @@
         ],
         "Transactions": [],
         "Overdraft": 500
+      },
+      {
+        "Phone Number": "3333333333",
+        "Account Number": "ETR-863142-122237",
+        "Account Type": "Loan Account",
+        "Password": "asd",
+        "Net Pay": 300.0,
+        "Card Number": "644196892980337",
+        "Date Made": "16/07/23",
+        "Due Dates": {
+          "17/07/23": 0,
+          "16/08/23": 0,
+          "15/09/23": 0,
+          "15/10/23": 0,
+          "14/11/23": 0,
+          "14/12/23": 0,
+          "13/01/24": 0,
+          "12/02/24": 0,
+          "13/03/24": 300.0
+        },
+        "Balance": 300.0
       }
     ]
   },
@@ -456,6 +528,53 @@
           ]
         ],
         "Overdraft": 500
+      },
+      {
+        "Phone Number": "3222222222",
+        "Account Number": "ETR-277978-520794",
+        "Account Type": "Savings Account",
+        "Password": "asdasdasdasd",
+        "Balance": 140777.0,
+        "Card Number": "482097374829056",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [
+          [
+            "Deposit",
+            "16/07/2023",
+            47889.0
+          ],
+          [
+            "Deposit",
+            "16/07/2023",
+            0.0
+          ],
+          [
+            "Deposit",
+            "16/07/2023",
+            9000.0
+          ],
+          [
+            "Deposit",
+            "16/07/2023",
+            98888.0
+          ],
+          [
+            "Withdraw",
+            "16/07/2023",
+            8000.0
+          ],
+          [
+            "Withdraw",
+            "16/07/2023",
+            7000.0
+          ]
+        ],
+        "Interest Rate": 0.005,
+        "Interest Add Date": "17/07/23"
       }
     ]
   },
@@ -521,7 +640,7 @@
         "Account Number": "ETR-446665-421745",
         "Account Type": "Checking Account",
         "Password": "mubashir123",
-        "Balance": 2022.0,
+        "Balance": 9022.0,
         "Card Number": "423085416126043",
         "Expiry Date": [
           "07/2028",
@@ -543,9 +662,115 @@
             "Withdraw",
             "15/07/2023",
             399.0
+          ],
+          [
+            "Deposit",
+            "16/07/2023",
+            7000
           ]
         ],
         "Overdraft": 500
+      }
+    ]
+  },
+  {
+    "Full Name": "muneeb",
+    "CNIC": "3345555555555",
+    "Accounts": [
+      {
+        "Phone Number": "3333333333",
+        "Account Number": "ETR-086357-564591",
+        "Account Type": "Checking Account",
+        "Password": "aaaaaaaaaaa",
+        "Balance": 9322.0,
+        "Card Number": "431102634856966",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [
+          [
+            "Deposit",
+            "16/07/2023",
+            4000.0
+          ],
+          [
+            "Withdraw",
+            "16/07/2023",
+            233.0
+          ],
+          [
+            "Deposit",
+            "16/07/2023",
+            5555.0
+          ]
+        ],
+        "Overdraft": 500
+      }
+    ]
+  },
+  {
+    "Full Name": "asd",
+    "CNIC": "3444444444444",
+    "Accounts": [
+      {
+        "Phone Number": "3333333333",
+        "Account Number": "ETR-889836-552555",
+        "Account Type": "Checking Account",
+        "Password": "4asdddddddddddd",
+        "Balance": 0,
+        "Card Number": "555099427744482",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [],
+        "Overdraft": 500
+      }
+    ]
+  },
+  {
+    "Full Name": "Muneeb",
+    "CNIC": "4220133333333",
+    "Accounts": [
+      {
+        "Phone Number": "3122345123",
+        "Account Number": "ETR-083930-745444",
+        "Account Type": "Savings Account",
+        "Password": "muneeb123123",
+        "Balance": 959688.0,
+        "Card Number": "3724415419220761",
+        "Expiry Date": [
+          "07/2028",
+          "July",
+          "2028"
+        ],
+        "Transactions": [
+          [
+            "Deposit",
+            "16/07/2023",
+            60000.0
+          ],
+          [
+            "Deposit",
+            "16/07/2023",
+            12000.0
+          ],
+          [
+            "Withdraw",
+            "16/07/2023",
+            1200.0
+          ],
+          [
+            "Deposit",
+            "16/07/2023",
+            888888.0
+          ]
+        ],
+        "Interest Rate": 0.005,
+        "Interest Add Date": "17/07/23"
       }
     ]
   }

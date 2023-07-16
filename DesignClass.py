@@ -24,14 +24,12 @@ class MasterGUI(ABC, intro_bank.IntroPage, create_account.CreateAccount, login.L
     def loginUser(self):
         self.login_button.clicked.connect(
             lambda: self.buttonclick(self.login_button))
-        print("login")
         self.MainWindow.close()
         self.setupUi_login(self.MainWindow)
         self.MainWindow.show()
     def createUser(self):
         self.create_button.clicked.connect(
             lambda: self.buttonclick(self.create_button))
-        print("create")
         self.MainWindow.close()
         self.setupUi_create(self.MainWindow)
         time.sleep(0.4)
@@ -42,10 +40,12 @@ class MasterGUI(ABC, intro_bank.IntroPage, create_account.CreateAccount, login.L
         Home.setupHome(self, self.MainWindow)
 
     def buttonclick(self, button:QtWidgets.QPushButton):
-        print(button.objectName())
-        buttons = [self.transfer_button, self.deposit, self.withdraw, self.month, self.year, self.name_2, self.number_2, self.copy, self.reveal]
-        for i in buttons:
-            i.setEnabled(True)
+        try:
+            buttons = [self.transfer_button, self.deposit, self.withdraw, self.month, self.year, self.name_2, self.number_2, self.copy, self.reveal]
+            for i in buttons:
+                i.setEnabled(True)
+        except:
+            pass
         init_rect = button.geometry()
         new_rect = QtCore.QRect(*[int(x / 1.1)
                                 for x in init_rect.getRect()])

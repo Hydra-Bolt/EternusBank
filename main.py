@@ -1,14 +1,10 @@
 
-import platform
 from PyQt5 import QtCore,QtGui,QtWidgets
-from abc import ABC, abstractmethod
 # GUI FILE
 from ui_main import DashBoard
 
 # IMPORT FUNCTIONS
 from ui_functions import *
-# class CommonMeta(type(ABC), type(QtWidgets.QMainWindow), type(DashBoard)):
-#     pass
 
 class Home(DashBoard):
     def setupHome(self, MainWindow):
