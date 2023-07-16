@@ -804,6 +804,15 @@ class Bank(DesignClass.MasterGUI):
     def repay_money(self):
         """Withdraws money from the loan customer's account and updates the loan details."""
         amount = self.loan_customer.withdraw()
+        if amount>self.account["Net Pay"]:
+            QtWidgets.QMessageBox.information(
+                self.MainWindow,
+                "Loan Repayment",
+                "More amount paid taking only part of payment. Loan fully repaid. Deleting and Exiting the account. Goodbye.",
+            )
+            self.account["Net Pay"] = 0
+            self.saveToDB()
+            self.MainWindow.close()
         if amount is None:
             return
         current_due = self.calculate_current_due()
@@ -814,6 +823,7 @@ class Bank(DesignClass.MasterGUI):
                 == 0
             ):
                 # No more dues remaining, all payments made
+                
                 QtWidgets.QMessageBox.information(
                     self.MainWindow,
                     "Loan Repayment",

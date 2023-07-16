@@ -1,6 +1,6 @@
 from Account import CheckingAccount, SavingsAccount, Loan
 from datetime import date
-
+from PyQt5.QtWidgets import QMessageBox
 
 
 class Customer:
@@ -47,8 +47,9 @@ class Customer:
         if self.current_account["Account Type"] == "Loan Account":
             for label in self.balance_labels:
                 net = (float(label.text().strip("$"))-amount)
-                label.setText(f"${max(net, 0)}")
-            self.current_account["Net Pay"] = self.current.withdraw(amount)
+                label.setText(f"${round(max(net, 0),2)}")
+            if amount<=self.current_account["Net Pay"]: 
+                self.current_account["Net Pay"] = self.current.withdraw(amount)
 
             return amount
         init = self.current_account["Balance"]
