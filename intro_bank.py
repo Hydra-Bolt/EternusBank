@@ -149,7 +149,7 @@ class IntroPage:
 
     def setUi_intro(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Welcome"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Welcome to Eternus Banking"))
         self.title.setText(_translate("MainWindow", "Eternus Banking"))
         self.slogan.setText(_translate(
             "MainWindow", "Where your financial future lasts forever."))

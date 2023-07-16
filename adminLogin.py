@@ -75,13 +75,12 @@ class AdminLogin:
         self.verticalLayout_2.addWidget(self.submit_button_frame)
         self.horizontalLayout_2.addWidget(self.details)
         AdminLogin.setCentralWidget(self.centralwidget)
-
+        AdminLogin.setWindowTitle("Admin Login")
         self.retranslateUi(AdminLogin)
         QtCore.QMetaObject.connectSlotsByName(AdminLogin)
 
     def retranslateUi(self, AdminLogin):
         _translate = QtCore.QCoreApplication.translate
-        AdminLogin.setWindowTitle(_translate("AdminLogin", "MainWindow"))
         self.welcome_message.setText(_translate("AdminLogin", "Eternus Banking Admin Login"))
         self.enter_details.setText(_translate("AdminLogin", "Enter the following details to sign in."))
         self.username.setText(_translate("AdminLogin", "User Name: "))

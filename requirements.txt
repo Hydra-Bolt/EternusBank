@@ -1,5 +1,4 @@
 PyQt5==5.15.9
-PySide2==5.15.2.1
 pyperclip==1.8.2
 fpdf==1.7.2
 pandas==2.0.2

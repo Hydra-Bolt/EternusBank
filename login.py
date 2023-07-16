@@ -122,13 +122,13 @@ class Login:
         self.verticalLayout.addWidget(self.subframe)
         self.horizontalLayout.addWidget(self.main_frame)
         Login.setCentralWidget(self.centralwidget)
+        Login.setWindowTitle("Login")
 
         self.setUI_login(Login)
         QtCore.QMetaObject.connectSlotsByName(Login)
 
     def setUI_login(self, Login):
         _translate = QtCore.QCoreApplication.translate
-        Login.setWindowTitle(_translate("Login", "MainWindow"))
         self.label.setText(_translate("Login", "Great to have you back."))
         self.cnic_label_login.setText(
             _translate("Login", "CNIC (Without dashes) :"))

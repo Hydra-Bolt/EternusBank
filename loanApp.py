@@ -63,6 +63,7 @@ class LoanApp:
         # Connect signals to slots
         self.okcancel.accepted.connect(self.accept)
         self.okcancel.rejected.connect(self.reject)
+        Loan.setWindowTitle("Application for Loan")
         QtCore.QMetaObject.connectSlotsByName(Loan)
 
     def retranslateLoanApp(self, Loan):

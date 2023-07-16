@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 class AdminWindow:
-    def setup_AWindowUi(self, MainWindow):
+    def setup_AWindowUi(self, MainWindow: QtWidgets.QMainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1098, 644)
         MainWindow.setStyleSheet("background-color:white;")
@@ -70,6 +70,7 @@ class AdminWindow:
         self.search.textChanged.connect(self.searchRecord)
         self.delete_records.setText("Delete Record")
         self.generate_report.setText("Generate Report")
+        MainWindow.setWindowTitle("Admin Window")
         MainWindow.setCentralWidget(self.centralwidget)
         
         QtCore.QMetaObject.connectSlotsByName(MainWindow)

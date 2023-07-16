@@ -1,25 +1,28 @@
-from re import I
+
 from adminLogin import AdminLogin
 from adminWindow import AdminWindow
 from report import Report
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import sys
-
+import ctypes
 
 class Admin:
     def __init__(self, Window: QtWidgets.QMainWindow) -> None:
+        super().__init__()
         self.setupDB()
         self.admin_login = AdminLogin()
         self.admin_window = AdminWindow()
         self.Window = Window
+        self.Window.setWindowIcon(QtGui.QIcon("./icons/logo_title.png"))
         self.admin_login.setup_ALoginUi(self.Window)
         self.admin_login.submit_button.clicked.connect(self.authenticateLogin)
         self.Window.show()
 
     def authenticateLogin(self):
         admins = {"Muneeb": "muneeb123123", "Tehreem": "tehreemkhan6677"}
-        if self.admin_login.user_edit.text() in admins:
+        self.adminname = self.admin_login.user_edit.text()
+        if self.adminname in admins:
             if admins[self.admin_login.user_edit.text()] == self.admin_login.password_edit.text():
                 self.openWindow()
             else:
@@ -96,7 +99,7 @@ class Admin:
                     {"Account Number": account["Account Number"]},
                     {"Account Type": account["Account Type"]},
                     {"Balance": account["Balance"]},
-                    {"Card Number": "3759577752541257"},
+                    {"Card Number": account["Card Number"]},
                     {"Expiry Date": account["Expiry Date"][0]},
                 ]
             )
@@ -109,21 +112,24 @@ class Admin:
                     {"Account Number": account["Account Number"]},
                     {"Account Type": account["Account Type"]},
                     {"Balance": account["Balance"]},
-                    {"Card Number": "3759577752541257"},
-                    {"Expiry Date": account["Due Dates"][(list(account["Due Dates"].keys())[-1])]},
+                    {"Card Number": account["Card Number"]},
+                    {"Current Due Date": next((key for key, value in account["Due Dates"].items() if value != 0), "Paid Off")},
+                    {"Expiry Date": (list(account["Due Dates"].keys())[-1])},
                 ]
             )
-        report.chapter_title("Transactions")
-        report.chapter_body([{"Transactions": account["Transactions"]}])
+        try:
+            report.chapter_title("Transactions")
+            report.chapter_body([{"Transactions": account["Transactions"]}])
 
-        report.add_page()
-        report.chapter_title("Recent Transaction Graph")
-
-        if account["Transactions"] != []:
-            self.generate_graph(account)
-            report.image(f"./customer_graphs/{account['Account Number']}.png", w=200)
-        else:
-            report.chapter_body({"Transactions": "No Transactions to plot"})
+            report.add_page()
+            report.chapter_title("Recent Transaction Graph")
+            if account["Transactions"] != []:
+                self.generate_graph(account)
+                report.image(f"./customer_graphs/{account['Account Number']}.png", w=200)
+            else:
+                report.chapter_body({"Transactions": "No Transactions to plot"})
+        except:
+            report.chapter_title("No Graph for Loan Account")
 
         report.output(f"./customer_reports/{out['Full Name']}_{out['CNIC']}.pdf")
         os.system(f"./customer_reports/{out['Full Name']}_{out['CNIC']}.pdf")
@@ -249,49 +255,64 @@ class Admin:
         self.configTable()
 
     def updateRecords(self, row, column):
+        """Updates Records for every changes in tables"""
         item = self.admin_window.details_table.item(row, column)
         if item is None:
             QtWidgets.QMessageBox.critical(
-                self.admin_window,
+                self.Window,
                 "DataBase Change",
-                "Oops, an error occurred!",
+                "Oops, an error occured!",
             )
             return
         changed_value = item.text()
         changed_key = self.fields[column]
         cnic_item = self.admin_window.details_table.item(row, 1)
-        if cnic_item is None:
+        c_number_item = self.admin_window.details_table.item(row, 4)
+        ac_number_item = self.admin_window.details_table.item(row,2)
+        
+        if cnic_item is None or c_number_item is None or ac_number_item is None:
             return
         cnic_value = cnic_item.text()
+        c_number = c_number_item.text()
+        ac_number = ac_number_item.text()
         output = (self.userAccountInfo.find({"CNIC": cnic_value}))[0]
         if changed_key in ["Full Name", "CNIC"]:
             output[changed_key] = changed_value
         else:
             if changed_key == "Account Number":
-                
                 for account in output["Accounts"]:
-                    if account["Account Number"] == changed_value:
-                        self.account = account
-            
-            self.account[changed_key] = changed_value
+                    if account["Card Number"] == c_number:
+                        break
+            elif changed_key == "Balance" or changed_key == "Net Pay":
+                changed_value = float(changed_value)
+                for account in output["Accounts"]:
+                    if account["Account Number"] == ac_number:
+                        break
+            else:
+                for account in output["Accounts"]:
+                    if account["Account Number"] == ac_number:
+                        break
+                
+            account[changed_key] = changed_value
         self.userAccountInfo.update_insert({"CNIC": cnic_value}, output)
         self.userAccountInfo.updateDB()
-
-
+    
     def openWindow(self):
         self.Window.close()
         self.admin_window.setup_AWindowUi(self.Window)
         self.admin_window.delete_records.clicked.connect(self.deleteRecords)
         self.admin_window.generate_report.clicked.connect(self.generateReport)
         self.admin_window.details_table.cellChanged.connect(self.updateRecords)
-        self.admin_window.delete_records.clicked.connect(lambda:self.buttonclick(self.admin_window.delete_records))
+        self.admin_window.delete_records.clicked.connect(lambda: self.buttonclick(self.admin_window.delete_records))
         self.admin_window.generate_report.clicked.connect(self.generateReport)
-        self.admin_window.generate_report.clicked.connect(lambda:self.buttonclick(self.admin_window.generate_report))
+        self.admin_window.generate_report.clicked.connect(lambda: self.buttonclick(self.admin_window.generate_report))
+        self.admin_window.hello.setText(f"Welcome, {self.adminname}")
         self.admin_window.search.textChanged.connect(self.searchRecord)
         self.admin_window.search.setPlaceholderText("Search...")
         self.admin_window.delete_records.setText("Delete Record")
         self.admin_window.generate_report.setText("Generate Report")
         self.Window.show()
+
         self.fields = [
             "Full Name",
             "CNIC",
@@ -435,5 +456,8 @@ class Admin:
 
 app = QtWidgets.QApplication(sys.argv)
 Window = QtWidgets.QMainWindow()
+myappid = 'mycompany.myproduct.subproduct.version' # arbitrary string
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
 ui = Admin(Window)
 sys.exit(app.exec_())

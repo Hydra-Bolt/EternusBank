@@ -7,10 +7,10 @@ from ui_main import DashBoard
 
 # IMPORT FUNCTIONS
 from ui_functions import *
-class CommonMeta(type(ABC), type(QtWidgets.QMainWindow), type(DashBoard)):
-    pass
+# class CommonMeta(type(ABC), type(QtWidgets.QMainWindow), type(DashBoard)):
+#     pass
 
-class Home(ABC, DashBoard, metaclass=CommonMeta):
+class Home(DashBoard):
     def setupHome(self, MainWindow):
         self.MainWindow = MainWindow
         self.setupDashboard(self.MainWindow)

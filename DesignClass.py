@@ -1,12 +1,8 @@
 
 import contextlib
-from doctest import master
-
-from torch import matrix_power
 import login
 import create_account
 import time
-import sys
 import importlib
 from main import Home
 import intro_bank
@@ -14,13 +10,13 @@ import loan_window
 from PyQt5 import QtCore, QtGui, QtWidgets
 import main
 import loanApp
-import inspect
 importlib.reload(intro_bank)
 importlib.reload(login)
 importlib.reload(create_account)
+from abc import ABC, abstractmethod
 
 
-class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login, main.Home, loanApp.LoanApp, loan_window.LoanWindow):
+class MasterGUI(ABC, intro_bank.IntroPage, create_account.CreateAccount, login.Login, main.Home, loanApp.LoanApp, loan_window.LoanWindow):
     def __init__(self, MainWindow):
         self.MainWindow = MainWindow
         self.setupUi_intro(self.MainWindow)
@@ -32,7 +28,6 @@ class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login,
         self.MainWindow.close()
         self.setupUi_login(self.MainWindow)
         self.MainWindow.show()
-
     def createUser(self):
         self.create_button.clicked.connect(
             lambda: self.buttonclick(self.create_button))
@@ -41,23 +36,16 @@ class MasterGUI(intro_bank.IntroPage, create_account.CreateAccount, login.Login,
         self.setupUi_create(self.MainWindow)
         time.sleep(0.4)
         self.MainWindow.show()
-
+    @abstractmethod
     def openHomeWindow(self):
         self.MainWindow.close()
         Home.setupHome(self, self.MainWindow)
 
     def buttonclick(self, button:QtWidgets.QPushButton):
         print(button.objectName())
-        # try:
-        #     if self.timer2.isActive():
-        #         QtWidgets.QMessageBox.critical(
-        #             self.MainWindow,
-        #             "Button Click",
-        #             "Please wait five second for the transaction to complete."
-        #         )
-        #         time.sleep(2)
-        # except:
-        #     pass
+        buttons = [self.transfer_button, self.deposit, self.withdraw, self.month, self.year, self.name_2, self.number_2, self.copy, self.reveal]
+        for i in buttons:
+            i.setEnabled(True)
         init_rect = button.geometry()
         new_rect = QtCore.QRect(*[int(x / 1.1)
                                 for x in init_rect.getRect()])

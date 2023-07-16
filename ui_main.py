@@ -3,8 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class DashBoard:
     def setupDashboard(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1200, 700)
-        MainWindow.setMinimumSize(1200, 700)
+        MainWindow.setMinimumSize(1200, 800)
         MainWindow.setMaximumSize(16777215, 16777215)
         MainWindow.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -828,6 +827,7 @@ class DashBoard:
         self.verticalLayout_5.addWidget(self.responsivePages)
         self.horizontalLayout_2.addWidget(self.frame_pages)
         self.verticalLayout.addWidget(self.Content)
+        MainWindow.setWindowTitle("Dashboard")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.setDashboard(MainWindow)
@@ -854,7 +854,6 @@ class DashBoard:
         pass
     def setDashboard(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.dashboard_top.setText(_translate("MainWindow", "Dashboard"))
         self.name_top.setText(_translate("MainWindow", "Welcome, Name here"))
         self.company_name.setText(_translate("MainWindow", "ETERNUS"))

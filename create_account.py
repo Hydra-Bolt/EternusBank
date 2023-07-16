@@ -166,6 +166,7 @@ class CreateAccount:
         self.verticalLayout_2.addWidget(
             self.label_frames, 0, QtCore.Qt.AlignHCenter)
         self.gridLayout.addWidget(self.frame_2, 0, 1, 1, 1)
+        CreateAccount.setWindowTitle("Account Creation")
         CreateAccount.setCentralWidget(self.centralwidget)
 
         self.setUI_create(CreateAccount)
@@ -173,7 +174,6 @@ class CreateAccount:
 
     def setUI_create(self, CreateAccount):
         _translate = QtCore.QCoreApplication.translate
-        CreateAccount.setWindowTitle(_translate("CreateAccount", "MainWindow"))
         self.message.setText(_translate(
             "CreateAccount", "Welcome, Happy to have you join us."))
         self.full_name_label.setText(_translate("CreateAccount", "Full Name:"))
