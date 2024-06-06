@@ -1,4 +1,6 @@
 <h1 align="center"> <img src="https://raw.githubusercontent.com/Hydra-Bolt/EternusBank/master/icons/logo.png"></h1>
+
+
 # Bank Eternus
 Bank Eternus is a comprehensive banking system designed to provide users with a seamless and secure banking experience. The system offers a range of features including account management, transactions, balance monitoring, and more.
 
